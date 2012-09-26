@@ -1,110 +1,141 @@
 #include "XMLScene.h"
 
+
+
+
+
+void queryStringValue(TiXmlElement &elem, string attr, string &value){
+    
+    
+    if(elem->QueryStringAttribute(attr, value) == TIXML_SUCCESS){
+        printf("%s: %s\n", attr, value);
+        
+    }else{
+        
+        printf("%s not found\n", attr);
+    }
+    
+}
+
+
+void queryBoolValue(TiXmlElement &elem, string attr, bool &value){
+    
+    string tmp;
+    if(elem->QueryStringAttribute(attr, value) == TIXML_SUCCESS){
+        
+        if(value){
+            tmp = "true";
+        }else{
+            tmp = "false";
+        }
+        printf("%s: %s\n", attr, tmp);
+        
+    }else{     
+        printf("%s not found\n", attr);
+    }
+    
+}
+
+
 XMLScene::XMLScene(char *filename)
 {
-
-    // Read XML from file
 
     doc = new TiXmlDocument(filename);
     bool loadOkay = doc->LoadFile();
 
-    if (!loadOkay)
-    {
+    if (!loadOkay) {
         printf("Could not load file '%s'. Error='%s'. Exiting.\n", filename, doc->ErrorDesc());
         exit(1);
     }
 
-    TiXmlElement* dgxElement = doc->FirstChildElement("dgx");
+    TiXmlElement* lsfElement = doc->FirstChildElement("lsf");
 
-    if (dgxElement == NULL)
-    {
-        printf("Main dgx block element not found! Exiting!\n");
+    if (lsfElement == NULL) {
+        printf("Main lsf block element not found! Exiting!\n");
         exit(1);
     }
 
-    initElement = dgxElement->FirstChildElement("Init");
-    matsElement = dgxElement->FirstChildElement("Materials");
-    textsElement = dgxElement->FirstChildElement("Textures");
-    leavesElement = dgxElement->FirstChildElement("Leaves");
-    nodesElement = dgxElement->FirstChildElement("Nodes");
+    globalsElement = lsfElement->FirstChildElement("globals");
+    camerasElement = lsfElement->FirstChildElement("cameras");
+    lightningElement = lsfElement->FirstChildElement("lightning");
+    appearancesElement = lsfElement->FirstChildElement("appearances");
+    leavesElement = lsfElement->FirstChildElement("leaves");
+    nodesElement = lsfElement->FirstChildElement("nodes");
+    graphElement = lsfElement->FirstChildElement("graph");
 
-    graphElement = dgxElement->FirstChildElement("Graph");
 
 
-    // Init
-    // An example of well-known, required nodes
+    if (globalsElement == NULL){
+        printf("Globals block not found!\n");
+    
+    } else {
+        printf("Processing Globals:\n");
+        
+        
+        //BACKGROUND
+        TiXmlElement* backgroundElement = globalsElement->FirstChildElement("background");      
+        if (backgroundElement) {
+            float red, green, blue;
 
-    if (initElement == NULL)
-        printf("Init block not found!\n");
-    else
-    {
-        printf("Processing init:\n");
-        // frustum: example of a node with individual attributes
-        TiXmlElement* frustumElement = initElement->FirstChildElement("frustum");
-        if (frustumElement)
-        {
-            float near, far;
-
-            if (frustumElement->QueryFloatAttribute("near", &near) == TIXML_SUCCESS &&
-                    frustumElement->QueryFloatAttribute("far", &far) == TIXML_SUCCESS
-                    )
-                printf("  frustum attributes: %f %f\n", near, far);
-            else
-                printf("Error parsing frustum\n");
+            if (backgroundElement->QueryFloatAttribute("r", &red) == TIXML_SUCCESS &&
+                    backgroundElement->QueryFloatAttribute("g", &green) == TIXML_SUCCESS &&
+                    backgroundElement->QueryFloatAttribute("b", &blue) == TIXML_SUCCESS
+                    ){
+               printf(" background attributes: %f %f %f\n", red, green, blue);
+            }else
+               printf("Error parsing background\n");
+        } else {
+            printf("backgroud not found\n");
         }
-        else
-            printf("frustum not found\n");
 
+        
+        //POLYGON
+        TiXmlElement* polygonElement = globalsElement->FirstChildElement("polygon");
+        if (polygonElement) {
+            string strMode, strShading;
+            
+            queryStringValue(polygonElement,"mode",strMode);
+            queryStringValue(polygonElement,"shading",strShading);
 
-        // translate: example of a node with an attribute comprising several float values
-        // It shows an example of extracting an attribute's value, and then further parsing that value 
-        // to extract individual values
-        TiXmlElement* translateElement = initElement->FirstChildElement("translate");
-        if (translateElement)
-        {
-            char *valString = NULL;
-            float x, y, z;
-
-            valString = (char *) translateElement->Attribute("xyz");
-
-            if (valString && sscanf(valString, "%f %f %f", &x, &y, &z) == 3)
-            {
-                printf("  translate values (XYZ): %f %f %f\n", x, y, z);
-            }
-            else
-                printf("Error parsing translate");
+        } else {
+            printf("Polygon not found\n");
         }
-        else
-            printf("translate not found\n");
+     
+        
+        //CULLING
+        TiXmlElement* cullingElement = globalsElement->FirstChildElement("culling");
+        if (cullingElement) {
 
-        // repeat for each of the variables as needed
+            string strFFO, cullface;
+            bool enabled;
+            
+    
+            queryStringValue(cullingElement,"frontfaceorder", strFFO);
+            queryStringValue(cullingElement, "cullface", cullface);
+            queryBoolValue(cullingElement, "enabled", enabled);
+           
+        }
     }
-
-    // Other blocks could be validated/processed here
+    
 
 
     // graph section
     if (graphElement == NULL)
         printf("Graph block not found!\n");
-    else
-    {
+    else {
         char *prefix = "  -";
         TiXmlElement *node = graphElement->FirstChildElement();
 
-        while (node)
-        {
+        while (node) {
             printf("Node id '%s' - Descendants:\n", node->Attribute("id"));
             TiXmlElement *child = node->FirstChildElement();
-            while (child)
-            {
-                if (strcmp(child->Value(), "Node") == 0)
-                {
+            while (child) {
+                if (strcmp(child->Value(), "Node") == 0) {
                     // access node data by searching for its id in the nodes section
 
                     TiXmlElement *noderef = findChildByAttribute(nodesElement, "id", child->Attribute("id"));
 
-                    if (noderef)
-                    {
+                    if (noderef) {
                         // print id
                         printf("  - Node id: '%s'\n", child->Attribute("id"));
 
@@ -113,24 +144,20 @@ XMLScene::XMLScene(char *filename)
                         printf("    - Texture id: '%s' \n", noderef->FirstChildElement("texture")->Attribute("id"));
 
                         // repeat for other leaf details
-                    }
-                    else
+                    } else
                         printf("  - Node id: '%s': NOT FOUND IN THE NODES SECTION\n", child->Attribute("id"));
 
                 }
-                if (strcmp(child->Value(), "Leaf") == 0)
-                {
+                if (strcmp(child->Value(), "Leaf") == 0) {
                     // access leaf data by searching for its id in the leaves section
                     TiXmlElement *leaf = findChildByAttribute(leavesElement, "id", child->Attribute("id"));
 
-                    if (leaf)
-                    {
+                    if (leaf) {
                         // it is a leaf and it is present in the leaves section
                         printf("  - Leaf id: '%s' ; type: '%s'\n", child->Attribute("id"), leaf->Attribute("type"));
 
                         // repeat for other leaf details
-                    }
-                    else
+                    } else
                         printf("  - Leaf id: '%s' - NOT FOUND IN THE LEAVES SECTION\n", child->Attribute("id"));
                 }
 
@@ -164,5 +191,7 @@ TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent, const char * 
 
     return child;
 }
+
+
 
 
