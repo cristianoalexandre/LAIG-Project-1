@@ -4,7 +4,7 @@
 
 
 
-void queryStringValue(TiXmlElement &elem, string attr, string &value){
+void queryStringValue(TiXmlElement* elem, string &attr, string &value){
     
     
     if(elem->QueryStringAttribute(attr, value) == TIXML_SUCCESS){
@@ -18,7 +18,7 @@ void queryStringValue(TiXmlElement &elem, string attr, string &value){
 }
 
 
-void queryBoolValue(TiXmlElement &elem, string attr, bool &value){
+void queryBoolValue(TiXmlElement* elem, string &attr, bool &value){
     
     string tmp;
     if(elem->QueryStringAttribute(attr, value) == TIXML_SUCCESS){
@@ -114,9 +114,47 @@ XMLScene::XMLScene(char *filename)
             queryStringValue(cullingElement, "cullface", cullface);
             queryBoolValue(cullingElement, "enabled", enabled);
            
+        }else{
+            printf("culling not found\n");
         }
     }
-    
+
+    if (camerasElement == NULL) {
+        printf("cameras block not found\n");
+    } else {
+        string camIni;
+        queryStringValue(camerasElement, "initial", camIni);
+        
+        
+        
+        TiXmlElement* child = NULL;
+        while(child = camerasElement->IterateChildren(child)){
+            
+            string id, near, far, angle;
+            queryStringValue(child,"id", id);
+            queryStringValue(child,"near", near);
+            queryStringValue(child,"far", far);
+            queryStringValue(child,"angle", angle);
+            
+            TiXmlElement* fromElement = child->FirstChildElement("from");
+            
+            if(fromElement){
+                
+                int x,y,z;
+                
+                if (fromElement->QueryIntAttribute("r", &x) == TIXML_SUCCESS &&
+                        fromElement->QueryIntAttribute("g", &y) == TIXML_SUCCESS &&
+                        fromElement->QueryIntAttribute("b", &z) == TIXML_SUCCESS){
+                 printf(" fromElement attributes: %d %d %d\n", x, y, z);
+            }else
+               printf("Error parsing fromElement\n");
+                
+            }
+            
+            
+            
+        }
+    }
 
 
     // graph section

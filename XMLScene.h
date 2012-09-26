@@ -3,6 +3,8 @@
 
 #include "tinyxml.h"
 
+using namespace std;
+
 class XMLScene
 {
 public:
@@ -13,11 +15,13 @@ public:
 
 protected:
 
+
     TiXmlDocument* doc;
 
-    TiXmlElement* initElement;
-    TiXmlElement* matsElement;
-    TiXmlElement* textsElement;
+    TiXmlElement* globalsElement;
+    TiXmlElement* camerasElement;
+    TiXmlElement* lightningElement;
+    TiXmlElement* appearancesElement;
     TiXmlElement* leavesElement;
     TiXmlElement* nodesElement;
     TiXmlElement* graphElement;
