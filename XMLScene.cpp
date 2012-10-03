@@ -1,56 +1,104 @@
 #include "XMLScene.h"
 
+#include <iostream>
+#include <vector>
 
+void parsingCycle(TiXmlElement* elem)
+{
 
-
-
-void queryStringValue(TiXmlElement* elem, string &attr, string &value){
-    
-    
-    if(elem->QueryStringAttribute(attr, value) == TIXML_SUCCESS){
-        printf("%s: %s\n", attr, value);
-        
-    }else{
-        
-        printf("%s not found\n", attr);
+    TiXmlElement* child = elem->FirstChildElement();
+    if (child == NULL)
+    {
+        printf("no more children\n");
+        return;
     }
-    
-}
 
+    while (child != NULL)
+    {
 
-void queryBoolValue(TiXmlElement* elem, string &attr, bool &value){
-    
-    string tmp;
-    if(elem->QueryStringAttribute(attr, value) == TIXML_SUCCESS){
-        
-        if(value){
-            tmp = "true";
-        }else{
-            tmp = "false";
+        char* name = (char*) child->Value();
+        printf("parsing %s element:\n", name);
+
+        TiXmlAttribute* attr = child->FirstAttribute();
+        while (attr != NULL)
+        {
+
+            char* tmp = (char*) attr->Value();
+            char* attrName = (char*) attr->Name();
+            printf("attribute %s = %s\n", attrName, tmp);
+            attr = attr->Next();
         }
-        printf("%s: %s\n", attr, tmp);
-        
-    }else{     
-        printf("%s not found\n", attr);
+
+        parsingCycle(child);
+        child = child->NextSiblingElement();
     }
-    
+    return;
 }
 
+void queryStringValue(TiXmlElement* elem, char* attr, char* value)
+{
+
+    value = NULL;
+    value = (char*) elem->Attribute(attr);
+
+    if (value != NULL)
+    {
+        printf("%s: %s\n", attr, value);
+
+    }
+    else
+    {
+        printf("%s not found\n", attr);
+    }
+
+}
+
+void queryBoolValue(TiXmlElement* elem, char* attr, bool* value)
+{
+
+    char* tmp = NULL;
+    tmp = (char*) elem->Attribute(attr);
+
+    if (tmp != NULL)
+    {
+        if (tmp == "true")
+        {
+            *value = true;
+        }
+        else
+        {
+            *value = false;
+        }
+
+        printf("%s: %s\n", attr, tmp);
+
+    }
+    else
+    {
+        printf("%s not found\n", attr);
+    }
+
+}
 
 XMLScene::XMLScene(char *filename)
 {
 
+    vector<char*> attributes;
+    vector<char*> names;
+
     doc = new TiXmlDocument(filename);
     bool loadOkay = doc->LoadFile();
 
-    if (!loadOkay) {
+    if (!loadOkay)
+    {
         printf("Could not load file '%s'. Error='%s'. Exiting.\n", filename, doc->ErrorDesc());
         exit(1);
     }
 
     TiXmlElement* lsfElement = doc->FirstChildElement("lsf");
 
-    if (lsfElement == NULL) {
+    if (lsfElement == NULL)
+    {
         printf("Main lsf block element not found! Exiting!\n");
         exit(1);
     }
@@ -65,115 +113,78 @@ XMLScene::XMLScene(char *filename)
 
 
 
-    if (globalsElement == NULL){
+    if (globalsElement == NULL)
+    {
         printf("Globals block not found!\n");
-    
-    } else {
+
+    }
+    else
+    {
         printf("Processing Globals:\n");
-        
-        
-        //BACKGROUND
-        TiXmlElement* backgroundElement = globalsElement->FirstChildElement("background");      
-        if (backgroundElement) {
-            float red, green, blue;
 
-            if (backgroundElement->QueryFloatAttribute("r", &red) == TIXML_SUCCESS &&
-                    backgroundElement->QueryFloatAttribute("g", &green) == TIXML_SUCCESS &&
-                    backgroundElement->QueryFloatAttribute("b", &blue) == TIXML_SUCCESS
-                    ){
-               printf(" background attributes: %f %f %f\n", red, green, blue);
-            }else
-               printf("Error parsing background\n");
-        } else {
-            printf("backgroud not found\n");
-        }
-
-        
-        //POLYGON
-        TiXmlElement* polygonElement = globalsElement->FirstChildElement("polygon");
-        if (polygonElement) {
-            string strMode, strShading;
-            
-            queryStringValue(polygonElement,"mode",strMode);
-            queryStringValue(polygonElement,"shading",strShading);
-
-        } else {
-            printf("Polygon not found\n");
-        }
-     
-        
-        //CULLING
-        TiXmlElement* cullingElement = globalsElement->FirstChildElement("culling");
-        if (cullingElement) {
-
-            string strFFO, cullface;
-            bool enabled;
-            
-    
-            queryStringValue(cullingElement,"frontfaceorder", strFFO);
-            queryStringValue(cullingElement, "cullface", cullface);
-            queryBoolValue(cullingElement, "enabled", enabled);
-           
-        }else{
-            printf("culling not found\n");
-        }
+        parsingCycle(globalsElement);
     }
 
-    if (camerasElement == NULL) {
+    if (camerasElement == NULL)
+    {
         printf("cameras block not found\n");
-    } else {
-        string camIni;
+    }
+    else
+    {
+        char* camIni;
         queryStringValue(camerasElement, "initial", camIni);
-        
-        
-        
-        TiXmlElement* child = NULL;
-        while(child = camerasElement->IterateChildren(child)){
-            
-            string id, near, far, angle;
-            queryStringValue(child,"id", id);
-            queryStringValue(child,"near", near);
-            queryStringValue(child,"far", far);
-            queryStringValue(child,"angle", angle);
-            
-            TiXmlElement* fromElement = child->FirstChildElement("from");
-            
-            if(fromElement){
-                
-                int x,y,z;
-                
-                if (fromElement->QueryIntAttribute("r", &x) == TIXML_SUCCESS &&
-                        fromElement->QueryIntAttribute("g", &y) == TIXML_SUCCESS &&
-                        fromElement->QueryIntAttribute("b", &z) == TIXML_SUCCESS){
-                 printf(" fromElement attributes: %d %d %d\n", x, y, z);
-            }else
-               printf("Error parsing fromElement\n");
-                
-            }
-            
-            
-            
-        }
+
+
+        parsingCycle(camerasElement);
+    }
+
+    if (lightningElement == NULL)
+    {
+        printf("lightning block not found\n");
+    }
+    else
+    {
+        bool doublesided, local, enabled;
+
+        queryBoolValue(lightningElement, "doublesided", &doublesided);
+        queryBoolValue(lightningElement, "local", &local);
+        queryBoolValue(lightningElement, "enabled", &enabled);
+
+        parsingCycle(lightningElement);
+    }
+
+    if (appearancesElement == NULL)
+    {
+        printf("appearances block not found\n");
+    }
+    else
+    {
+        parsingCycle(appearancesElement);
     }
 
 
     // graph section
     if (graphElement == NULL)
         printf("Graph block not found!\n");
-    else {
+    else
+    {
         char *prefix = "  -";
         TiXmlElement *node = graphElement->FirstChildElement();
 
-        while (node) {
+        while (node)
+        {
             printf("Node id '%s' - Descendants:\n", node->Attribute("id"));
             TiXmlElement *child = node->FirstChildElement();
-            while (child) {
-                if (strcmp(child->Value(), "Node") == 0) {
+            while (child)
+            {
+                if (strcmp(child->Value(), "Node") == 0)
+                {
                     // access node data by searching for its id in the nodes section
 
                     TiXmlElement *noderef = findChildByAttribute(nodesElement, "id", child->Attribute("id"));
 
-                    if (noderef) {
+                    if (noderef)
+                    {
                         // print id
                         printf("  - Node id: '%s'\n", child->Attribute("id"));
 
@@ -182,20 +193,24 @@ XMLScene::XMLScene(char *filename)
                         printf("    - Texture id: '%s' \n", noderef->FirstChildElement("texture")->Attribute("id"));
 
                         // repeat for other leaf details
-                    } else
+                    }
+                    else
                         printf("  - Node id: '%s': NOT FOUND IN THE NODES SECTION\n", child->Attribute("id"));
 
                 }
-                if (strcmp(child->Value(), "Leaf") == 0) {
+                if (strcmp(child->Value(), "Leaf") == 0)
+                {
                     // access leaf data by searching for its id in the leaves section
                     TiXmlElement *leaf = findChildByAttribute(leavesElement, "id", child->Attribute("id"));
 
-                    if (leaf) {
+                    if (leaf)
+                    {
                         // it is a leaf and it is present in the leaves section
                         printf("  - Leaf id: '%s' ; type: '%s'\n", child->Attribute("id"), leaf->Attribute("type"));
 
                         // repeat for other leaf details
-                    } else
+                    }
+                    else
                         printf("  - Leaf id: '%s' - NOT FOUND IN THE LEAVES SECTION\n", child->Attribute("id"));
                 }
 
@@ -229,7 +244,3 @@ TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent, const char * 
 
     return child;
 }
-
-
-
-

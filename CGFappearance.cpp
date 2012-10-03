@@ -11,157 +11,170 @@
 
 #include <iostream>
 
-
 CGFappearance::CGFappearance()
 {
-	try {
-		color[0] = 0.5;
-		color[1] = 0.5;
-		color[2] = 0.5;
+    try
+    {
+        color[0] = 0.5;
+        color[1] = 0.5;
+        color[2] = 0.5;
+        color[3] = 1;
 
-		materialType = CG_GLMAT_COLOR;
+        materialType = CG_GLMAT_COLOR;
 
-		texture=NULL;
-	}
-	catch(std::exception&) {
-		throw GLexception("CGFappearance::constructor failed");
-	}
-
-}
-
-CGFappearance::CGFappearance(float* a, float* d, float* sp, float sh) 
-{
-	try {
-		ambient[0] = a[0];
-		ambient[1] = a[1];
-		ambient[2] = a[2];
-		ambient[3] = a[3];
-
-		diffuse[0] = d[0];
-		diffuse[1] = d[1];
-		diffuse[2] = d[2];
-		diffuse[3] = d[3];
-		
-		specular[0] = sp[0];
-		specular[1] = sp[1];
-		specular[2] = sp[2];
-		specular[3] = sp[3];
-
-		shininess = sh;
-
-		materialType = CG_GLMAT_MATERIAL;
-
-		texture=NULL;
-	}
-	catch(std::exception&) {
-		throw GLexception("CGFappearance::constructor failed");
-	}
-}
-
-CGFappearance::CGFappearance(float* c) 
-{
-	try {
-		color[0] = c[0];
-		color[1] = c[1];
-		color[2] = c[2];
-
-		materialType = CG_GLMAT_COLOR;
-
-		texture=NULL;
-	}
-	catch(std::exception&) {
-		throw GLexception("CGFappearance::constructor failed");
-	}
-}
-
-CGFappearance::~CGFappearance() 
-{
+        texture = NULL;
+    }
+    catch (std::exception&)
+    {
+        throw GLexception("CGFappearance::constructor failed");
+    }
 
 }
 
-void CGFappearance::apply() 
+CGFappearance::CGFappearance(float* a, float* d, float* sp, float sh)
 {
+    try
+    {
+        ambient[0] = a[0];
+        ambient[1] = a[1];
+        ambient[2] = a[2];
+        ambient[3] = a[3];
 
-	if(materialType==CG_GLMAT_MATERIAL) {
-		glDisable(GL_COLOR_MATERIAL);
-		glMaterialf(GL_FRONT, GL_SHININESS, shininess);
-		glMaterialfv(GL_FRONT, GL_SPECULAR,  specular);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE,   diffuse);
-		glMaterialfv(GL_FRONT, GL_AMBIENT,   ambient);
-	}
-	else if(materialType==CG_GLMAT_COLOR) {
-		glEnable(GL_COLOR_MATERIAL);
-		glColor3fv(color);
-	}
+        diffuse[0] = d[0];
+        diffuse[1] = d[1];
+        diffuse[2] = d[2];
+        diffuse[3] = d[3];
 
-	if (texture!=NULL)
-	{
-		glEnable(GL_TEXTURE_2D);
-		texture->apply();	       
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, sWrap);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tWrap);
-	}
-	else
-		glDisable(GL_TEXTURE_2D);	       
+        specular[0] = sp[0];
+        specular[1] = sp[1];
+        specular[2] = sp[2];
+        specular[3] = sp[3];
+
+        shininess = sh;
+
+        materialType = CG_GLMAT_MATERIAL;
+
+        texture = NULL;
+    }
+    catch (std::exception&)
+    {
+        throw GLexception("CGFappearance::constructor failed");
+    }
 }
 
-void CGFappearance::setAmbient(float* li) 
+CGFappearance::CGFappearance(float* c)
 {
-	ambient [0] = li[0];
-	ambient [1] = li[1];
-	ambient [2] = li[2];
-	ambient [3] = li[3];
+    try
+    {
+        color[0] = c[0];
+        color[1] = c[1];
+        color[2] = c[2];
+        color[3] = c[3];
+
+        materialType = CG_GLMAT_COLOR;
+
+        texture = NULL;
+    }
+    catch (std::exception&)
+    {
+        throw GLexception("CGFappearance::constructor failed");
+    }
 }
 
-void CGFappearance::setDiffuse(float* li) 
+CGFappearance::~CGFappearance()
 {
-	diffuse [0] = li[0];
-	diffuse [1] = li[1];
-	diffuse [2] = li[2];
-	diffuse [3] = li[3];
+
 }
 
-void CGFappearance::setSpecular(float* li) 
+void CGFappearance::apply()
 {
-	specular [0] = li[0];
-	specular [1] = li[1];
-	specular [2] = li[2];
-	specular [3] = li[3];
+
+    if (materialType == CG_GLMAT_MATERIAL)
+    {
+        glDisable(GL_COLOR_MATERIAL);
+        glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
+        glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
+    }
+    else if (materialType == CG_GLMAT_COLOR)
+    {
+        glEnable(GL_COLOR_MATERIAL);
+        glColor4fv(color);
+    }
+
+    if (texture != NULL)
+    {
+        glEnable(GL_TEXTURE_2D);
+        texture->apply();
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, sWrap);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tWrap);
+    }
+    else
+        glDisable(GL_TEXTURE_2D);
 }
 
-void CGFappearance::setShininess(float shi) 
+void CGFappearance::setAmbient(float* li)
 {
-	shininess = shi;
+    ambient [0] = li[0];
+    ambient [1] = li[1];
+    ambient [2] = li[2];
+    ambient [3] = li[3];
 }
 
-void CGFappearance::setTexture(string t) 
+void CGFappearance::setDiffuse(float* li)
 {
-	texture=new CGFtexture(t);
+    diffuse [0] = li[0];
+    diffuse [1] = li[1];
+    diffuse [2] = li[2];
+    diffuse [3] = li[3];
 }
 
-void CGFappearance::setTexture(CGFtexture *tp) 
+void CGFappearance::setSpecular(float* li)
 {
-	texture=tp;
+    specular [0] = li[0];
+    specular [1] = li[1];
+    specular [2] = li[2];
+    specular [3] = li[3];
+}
+
+void CGFappearance::setShininess(float shi)
+{
+    shininess = shi;
+}
+
+void CGFappearance::setTexture(string t)
+{
+    texture = new CGFtexture(t);
+}
+
+void CGFappearance::setTexture(CGFtexture *tp)
+{
+    texture = tp;
 }
 
 void CGFappearance::setTextureWrap(int s, int t)
 {
-		sWrap=s;
-		tWrap=t;
+    sWrap = s;
+    tWrap = t;
 }
 
 CGFappearance::CGFappearance(string tex, int s, int t) : CGFappearance()
 {
-	try {
+    try
+    {        
+        //CGFappearance();
+        
+        setTexture(tex);
 
-		setTexture(tex);
-
-		setTextureWrap(s,t);
-	}
-	catch (GLexception& ex) {
-		throw ex;
-	}
-	catch (std::exception&) {
-		throw GLexception("CGFappearence::constructor for texture failed");
-	}
+        setTextureWrap(s, t);
+    }
+    catch (GLexception& ex)
+    {
+        throw ex;
+    }
+    catch (std::exception&)
+    {
+        throw GLexception("CGFappearence::constructor for texture failed");
+    }
 }
