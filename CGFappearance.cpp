@@ -159,11 +159,20 @@ void CGFappearance::setTextureWrap(int s, int t)
     tWrap = t;
 }
 
-CGFappearance::CGFappearance(string tex, int s, int t) : CGFappearance()
+CGFappearance::CGFappearance(string tex, int s, int t)
 {
     try
     {        
-        //CGFappearance();
+        CGFappearance();
+        
+        /*color[0] = 0.5;
+        color[1] = 0.5;
+        color[2] = 0.5;
+        color[3] = 1;
+
+        materialType = CG_GLMAT_COLOR;
+
+        texture = NULL;*/
         
         setTexture(tex);
 

@@ -1,8 +1,10 @@
-
 #ifndef NODE_H
 #define	NODE_H
 
 #include <vector>
+
+#include "Figure.h"
+#include "CGFappearance.h"
 
 using namespace std;
 
@@ -20,11 +22,13 @@ private:
 public:
     Node();
     Node(char* node_id);
+    char* getID();
     void addChild(Node* child);
     void addChildID(char* id);
     int getNumberOfChildren();
-    bool seekNullChildren();
-    Node* getChildByID(int id);
+    void setAppearance(CGFappearance* appearance);
+    bool seekNonExistentChildren();
+    Node* getChildByID(char* id);
 
 };
 
