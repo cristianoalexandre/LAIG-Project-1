@@ -2,6 +2,7 @@
 #define _XMLSCENE_H_
 
 #include "tinyxml.h"
+#include <string>
 
 using namespace std;
 
@@ -25,6 +26,10 @@ protected:
     TiXmlElement* leavesElement;
     TiXmlElement* nodesElement;
     TiXmlElement* graphElement;
+    TiXmlElement* lightsElement;
 };
+
+void queryStringValue(TiXmlElement* elem, string &attr, string &value);
+void queryBoolValue(TiXmlElement* elem, string &attr, bool &value);
 
 #endif
