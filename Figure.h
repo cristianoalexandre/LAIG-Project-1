@@ -1,7 +1,8 @@
 #ifndef FIGURE_H
 #define	FIGURE_H
 
-class Figure {
+class Figure
+{
 private:
 
 public:

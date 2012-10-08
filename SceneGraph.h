@@ -2,22 +2,26 @@
 #define	SCENEGRAPH_H
 
 #include <map>
+#include <string>
 
 #include "Node.h"
 
 using namespace std;
 
+typedef map<string,Node*> lsfmap;
+
 class SceneGraph
 {
 private:
-    map<char*,Node*> scene_map;
+    lsfmap scene_map;
     
 public:
     SceneGraph();
-    SceneGraph(map<char*,Node*>);
+    SceneGraph(lsfmap &scene_map);
     
     Node* getNodeById(char* id);
-    int getNodeID(Node* node);
+    string getNodeID(Node* node);
+    void addNode(Node* node);
 };
 
 #endif	/* SCENEGRAPH_H */

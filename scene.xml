@@ -225,6 +225,5 @@
 				<rectangle x1="0.0" y1="0.0" x2="1.0" y2="1.0" />
 			</children>
 		</node>
-
-    	</graph>
-   </lsf>
+    </graph>
+</lsf>
