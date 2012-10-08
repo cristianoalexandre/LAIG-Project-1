@@ -5,11 +5,17 @@
 
 Node::Node()
 {
-    id = (char*) "not defined";
+    id = "not defined";
     appearance = NULL;
 }
 
 Node::Node(char* node_id)
+{
+    id = string(node_id);
+    appearance = NULL;
+}
+
+Node::Node(string node_id)
 {
     id = node_id;
     appearance = NULL;
@@ -27,9 +33,14 @@ void Node::addChildID(char* id)
 
 Node* Node::getChildByID(char* id)
 {
+    return getChildByID(string(id));
+}
+
+Node* Node::getChildByID(string id)
+{
     for (vector <Node*>::iterator it = children.begin(); it != children.end(); it++)
     {
-        if (!strcmp((*it)->getID(), id))
+        if ((*it)->getID() == id)
         {
             return (*it);
         }
@@ -58,7 +69,12 @@ void Node::setAppearance(CGFappearance* appearance)
     this->appearance = appearance;
 }
 
-char* Node::getID()
+string Node::getID()
 {
     return id;
+}
+
+bool Node::operator==(Node &n)
+{
+    return id == n.getID();
 }

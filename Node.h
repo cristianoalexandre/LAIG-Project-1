@@ -12,7 +12,7 @@ class Node
 {
     
 private:
-    char* id;
+    string id;
     vector <char*> children_id;
     vector <Node*> children;
     vector <Figure*> primitives;
@@ -22,13 +22,17 @@ private:
 public:
     Node();
     Node(char* node_id);
-    char* getID();
+    Node(string node_id);
+    string getID();
     void addChild(Node* child);
     void addChildID(char* id);
     int getNumberOfChildren();
     void setAppearance(CGFappearance* appearance);
     bool seekNonExistentChildren();
     Node* getChildByID(char* id);
+    Node* getChildByID(string id);
+    
+    bool operator==(Node &n);
 
 };
 
