@@ -3,10 +3,11 @@
 
 class SceneValues
 {
-protected:
-    
 public:
-    virtual void apply();
+    SceneValues();
+    virtual ~SceneValues();
+
+    virtual void apply() = 0;
 };
 
 #endif	/* SCENEVALUES_H */

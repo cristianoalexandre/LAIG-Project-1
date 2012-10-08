@@ -1,6 +1,8 @@
 #ifndef GLOBALVALUES_H
 #define	GLOBALVALUES_H
 
+#include "SceneValues.h"
+
 #include <string>
 
 using namespace std;
@@ -28,12 +30,11 @@ private:
     vector <int> polygon; /* mode, shading */
     vector <int> culling; /* frontfaceorder, cullface, enabled */
 
-    void addBackgroundValues(vector <int> values);
     void addPolygonValues(vector <int> values);
     void addCullingValues(vector <int> values);
 
 public:
-    CameraValues();
+    GlobalValues();
     void addBackgroundValues(vector <int> values);
     void addBackgroundValues(int R, int G, int B, int A);
     void addPolygonValues(vector <string> values);
@@ -50,6 +51,8 @@ public:
     void setCullingFrontFaceOrder(string frontfaceorder);
     void setCullingCullface(string cullface);
     void setCullingEnabled(string enabled);
+    
+    void apply();
 };
 
 #endif	/* GLOBALVALUES_H */
