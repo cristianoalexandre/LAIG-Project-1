@@ -1,6 +1,5 @@
 #include "GlobalValues.h"
 
-<<<<<<< HEAD
 GlobalValues::GlobalValues()
 {
     background.push_back(0);
@@ -140,6 +139,3 @@ void GlobalValues::apply()
 {
 
 }
-=======
-
->>>>>>> 73a32f2fb6a6f013031166d76e030b8182f0d898

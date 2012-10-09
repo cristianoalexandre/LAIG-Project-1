@@ -10,8 +10,8 @@ private:
 
 public:
 
-	void apply(){}
+	void apply(){};
 
-}
+};
 
 #endif	/* CAMERAVALUES_H */
