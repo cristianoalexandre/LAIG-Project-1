@@ -5,30 +5,97 @@
 
 
 
-void XMLScene::parsingCycle(TiXmlElement* elem/*, set<TiXmlElement*> &elemSet*/){
+void XMLScene::attributeParser(SceneValues val, TiXmlElement* elem){
 
-	/*set<TiXmlElement*>::iterator it;
-
-	it = elemSet.find(elem);
-
-	if(it != elemSet.end()){
-		if(*it ==
-	}
-	*/
-	
-
-
-
-
-	char* name = (char*) elem->Value();
-	printf("parsing %s element:\n", name);
-
-	
+	printf("parsing attributes:\n");
 	TiXmlAttribute* attr = elem->FirstAttribute();
 	while(attr != NULL){
 
 		char* tmp = (char*) attr->Value();
 		char* attrName = (char*) attr->Name();
+
+		//val.addAttributes;
+		printf("attribute %s = %s\n", attrName, tmp);
+		attr = attr->Next();
+	}
+}
+
+
+void XMLScene::parsingCycle(TiXmlElement* elem, SceneValues val){
+
+	char* name = (char*) elem->Value();
+	printf("parsing %s element:\n", name);
+
+	attributeParser(val, elem);
+
+	TiXmlElement* child = elem->FirstChildElement();
+	if(child == NULL){
+		printf("no more children\n");
+		return;
+	}else{
+		while(child != NULL){
+			parsingCycle(child, val);
+			child = child->NextSiblingElement();
+		}
+	}
+	return;
+}
+
+
+
+void XMLScene::initParser(TiXmlElement* elem){
+
+	set<TiXmlElement*>::iterator it;
+
+	
+	it = this->elements.find(elem);
+
+	if(it != this->elements.end()){
+		if(*it == this->globalsElement){
+			GlobalValues val;
+			parsingCycle(elem, val);
+		}else{
+			if(*it == this->camerasElement){
+				CameraValues val;
+				parsingCycle(elem, val);
+			}else{
+				if(*it == this->lightningElement){
+					LightValues val;
+					parsingCycle(elem, val);
+				}else{
+					if(*it == this->appearancesElement){
+						//AppearanceValues val;
+						//parsingCycle(elem, val);
+					}else{
+						if(*it == this->graphElement){ // parsing cycle not yet fully implemented for this type of TiXmlElement
+							SceneValues val;
+							parsingCycle(elem, val); //for now, only for compliling and debugging purposes
+						}else{
+							if(*it == this->nodesElement){ // parsing cycle not yet fully implemented for this type of TiXmlElement
+								SceneValues val;
+								parsingCycle(elem, val); //for now, only for compliling and debugging purposes
+							}else{
+
+							}
+						}
+					}
+				}
+			}
+		}
+	}else{
+		SceneValues val;
+		parsingCycle(elem, val); //for now, only for compliling and debugging purposes
+	}
+	
+
+	/*
+	TiXmlAttribute* attr = elem->FirstAttribute();
+	while(attr != NULL){
+
+		char* tmp = (char*) attr->Value();
+		char* attrName = (char*) attr->Name();
+
+		val.apply();
 		printf("attribute %s = %s\n", attrName, tmp);
 		attr = attr->Next();
 
@@ -45,7 +112,7 @@ void XMLScene::parsingCycle(TiXmlElement* elem/*, set<TiXmlElement*> &elemSet*/)
 
 		parsingCycle(child);
 		child = child->NextSiblingElement();
-	}
+	}*/
 	return;
 }
 
@@ -92,26 +159,26 @@ XMLScene::XMLScene(char *filename)
 		printf("Globals block not found!\n");
 
 	} else {
-		parsingCycle(globalsElement);
+		initParser(globalsElement);
 	}
 
 	if (camerasElement == NULL) {
 		printf("cameras block not found\n");
 	} else {
 
-		parsingCycle(camerasElement);
+		initParser(camerasElement);
 	}
 
 	if(lightningElement == NULL){
 		printf("lightning block not found\n");
 	}else{
-		parsingCycle(lightningElement);
+		initParser(lightningElement);
 	}
 
 	if(appearancesElement == NULL){
 		printf("appearances block not found\n");
 	}else{
-		parsingCycle(appearancesElement);
+		initParser(appearancesElement);
 	}
 
 
@@ -120,7 +187,7 @@ XMLScene::XMLScene(char *filename)
 		printf("Graph block not found!\n");
 	else {
 
-		parsingCycle(graphElement);
+		initParser(graphElement);
 	}
 		/*char *prefix = "  -";
 		TiXmlElement *node = graphElement->FirstChildElement();

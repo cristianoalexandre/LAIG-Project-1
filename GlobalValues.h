@@ -4,6 +4,7 @@
 #include "SceneValues.h"
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -42,7 +43,7 @@ public:
     void addCullingValues(vector <string> values);
     void addCullingValues(string frontfaceorder, string cullface, string enabled);
 
-    void setBackgroundR(int R);
+	void setBackgroundR(int R);
     void setBackgroundG(int G);
     void setBackgroundB(int B);
     void setBackgroundA(int A);

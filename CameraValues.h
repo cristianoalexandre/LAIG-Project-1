@@ -3,6 +3,15 @@
 
 #include "SceneValues.h"
 
+class CameraValues: public SceneValues
+{
+private:
 
+
+public:
+
+	void apply(){}
+
+}
 
 #endif	/* CAMERAVALUES_H */
