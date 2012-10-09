@@ -5,9 +5,16 @@
 
 
 
-void parsingCycle(TiXmlElement* elem/*, &set<*/){
+void XMLScene::parsingCycle(TiXmlElement* elem/*, set<TiXmlElement*> &elemSet*/){
 
+	/*set<TiXmlElement*>::iterator it;
 
+	it = elemSet.find(elem);
+
+	if(it != elemSet.end()){
+		if(*it ==
+	}
+	*/
 	
 
 

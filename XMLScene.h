@@ -2,7 +2,7 @@
 #define _XMLSCENE_H_
 
 #include "tinyxml.h"
-#include <string>
+#include <set>
 
 using namespace std;
 
@@ -13,8 +13,11 @@ public:
     ~XMLScene();
 
     static TiXmlElement *findChildByAttribute(TiXmlElement *parent, const char * attr, const char *val);
+	void parsingCycle(TiXmlElement* elem);
 
 protected:
+
+	set <TiXmlElement*> elements;
 
 
     TiXmlDocument* doc;
@@ -26,10 +29,6 @@ protected:
     TiXmlElement* leavesElement;
     TiXmlElement* nodesElement;
     TiXmlElement* graphElement;
-    TiXmlElement* lightsElement;
 };
-
-void queryStringValue(TiXmlElement* elem, string &attr, string &value);
-void queryBoolValue(TiXmlElement* elem, string &attr, bool &value);
 
 #endif
