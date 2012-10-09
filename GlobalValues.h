@@ -63,6 +63,7 @@ public:
     void addCullingValues(vector <string> values);
     void addCullingValues(string frontfaceorder, string cullface, string enabled);
 
+<<<<<<< HEAD
     void setBackgroundR(int newR);
     void setBackgroundG(int newG);
     void setBackgroundB(int newB);
@@ -72,6 +73,17 @@ public:
     void setCullingFrontFaceOrder(char* new_frontfaceorder);
     void setCullingCullface(char* new_cullface);
     void setCullingEnabled(char* new_enabled);
+=======
+	void setBackgroundR(int R);
+    void setBackgroundG(int G);
+    void setBackgroundB(int B);
+    void setBackgroundA(int A);
+    void setPolygonMode(string mode);
+    void setPolygonShading(string mode);
+    void setCullingFrontFaceOrder(string frontfaceorder);
+    void setCullingCullface(string cullface);
+    void setCullingEnabled(string enabled);
+>>>>>>> 73a32f2fb6a6f013031166d76e030b8182f0d898
     
     void apply();
 };

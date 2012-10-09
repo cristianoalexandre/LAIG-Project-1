@@ -5,7 +5,11 @@
 
 class LightValues : public SceneValues
 {
-    
+private:
+
+
+public:
+	void apply(){}
 };
 
 #endif	/* LIGHTVALUES_H */

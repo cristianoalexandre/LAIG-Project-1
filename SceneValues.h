@@ -7,7 +7,7 @@ public:
     SceneValues();
     virtual ~SceneValues();
 
-    virtual void apply() = 0;
+    virtual void apply();
 };
 
 #endif	/* SCENEVALUES_H */
