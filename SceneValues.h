@@ -4,10 +4,10 @@
 class SceneValues
 {
 public:
-    SceneValues();
-    virtual ~SceneValues();
+	SceneValues();
+	virtual ~SceneValues();
 
-    virtual void apply();
+	virtual void apply();
 };
 
 #endif	/* SCENEVALUES_H */
