@@ -5,6 +5,8 @@
 
 #include <string>
 #include <vector>
+#include <cstdlib>
+#include <cstring>
 
 using namespace std;
 
@@ -24,44 +26,18 @@ const unsigned int FRONTFACEORDER = 0;
 const unsigned int CULLFACE = 1;
 const unsigned int ENABLED = 2;
 
-/* ======== OPTIONS ========*/
-/* Polygon - mode */
-const unsigned int FILL = 0;
-
-/* Polygon - shading */
-const unsigned int GORAUD = 0;
-
-/* Culling - Front Face Order */
-const unsigned int CCW = 0;
-
-/* Culling - Cullface */
-const unsigned int BACK = 0;
-
-/* Culling - enabled */
-const unsigned int FALSE = 0;
-const unsigned int TRUE = 0;
-
 class GlobalValues : public SceneValues
 {
 private:
     vector <int> background; /* R,G,B,A */
-    vector <int> polygon; /* mode, shading */
-    vector <int> culling; /* frontfaceorder, cullface, enabled */
-
-    void addPolygonValues(vector <int> values);
-    void addCullingValues(vector <int> values);
-
-    vector<int> parseCullingFrontFaceOrder(string value);
-    vector<int> parseCullingCullFace(string value);
+    vector <string> polygon; /* mode, shading */
+    vector <string> culling; /* frontfaceorder, cullface, enabled */
 
 public:
     GlobalValues();
-    void addBackgroundValues(vector <int> values);
-    void addBackgroundValues(int R, int G, int B, int A);
-    void addPolygonValues(vector <string> values);
-    void addPolygonValues(string mode, string shading);
-    void addCullingValues(vector <string> values);
-    void addCullingValues(string frontfaceorder, string cullface, string enabled);
+    void addBackgroundValues(char* attribute, char* value);
+    void addPolygonValues(char* attribute, char* value);
+    void addCullingValues(char* attribute, char* value);
 
     void setBackgroundR(int newR);
     void setBackgroundG(int newG);
@@ -74,6 +50,7 @@ public:
     void setCullingEnabled(char* new_enabled);
 
     void apply();
+    void addValues(char* element, char* attribute, char* value);
 };
 
 #endif	/* GLOBALVALUES_H */

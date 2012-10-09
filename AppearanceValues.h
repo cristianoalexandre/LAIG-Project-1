@@ -3,15 +3,15 @@
 
 #include "SceneValues.h"
 
-//using namespace std;
-
 class AppearanceValues : public SceneValues
 {
 private:
 
 public:
-	AppearanceValues();
-	void apply();
+    AppearanceValues();
+    virtual ~AppearanceValues();
+    void apply();
+    void addValues(char* element, char* attribute, char* value);
 };
 
 #endif	/* APPEARANCEVALUES_H */

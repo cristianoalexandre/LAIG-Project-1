@@ -4,11 +4,11 @@
 class SceneValues
 {
 public:
-	SceneValues();
-	virtual ~SceneValues();
+    SceneValues();
+    virtual ~SceneValues();
 
-	virtual void apply();
+    virtual void apply();
+    virtual void addValues(char* element, char* attribute, char* value);
 };
 
 #endif	/* SCENEVALUES_H */
-

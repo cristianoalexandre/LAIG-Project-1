@@ -162,17 +162,15 @@ void CGFappearance::setTextureWrap(int s, int t)
 CGFappearance::CGFappearance(string tex, int s, int t)
 {
     try
-    {        
-        CGFappearance();
-        
-        /*color[0] = 0.5;
+    {             
+        color[0] = 0.5;
         color[1] = 0.5;
         color[2] = 0.5;
         color[3] = 1;
 
         materialType = CG_GLMAT_COLOR;
 
-        texture = NULL;*/
+        texture = NULL;
         
         setTexture(tex);
 

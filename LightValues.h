@@ -7,9 +7,11 @@ class LightValues : public SceneValues
 {
 private:
 
-
 public:
-	void apply(){}
+    LightValues();
+    virtual ~LightValues();
+    void apply();
+    void addValues(char* element, char* attribute, char* value);
 };
 
 #endif	/* LIGHTVALUES_H */
