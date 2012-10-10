@@ -10,45 +10,26 @@
 
 using namespace std;
 
-/* ======== VECTOR POSITIONS ========= */
-/* Perspective */
-const unsigned int P_NEAR = 0;
-const unsigned int P_FAR = 1;
-const unsigned int ANGLE = 0;
-
-/* From / To */
-const unsigned int X = 0;
-const unsigned int Y = 0;
-const unsigned int Z = 0;
-
-/* Ortho */
-const unsigned int O_NEAR = 0;
-const unsigned int O_FAR = 1;
-const unsigned int LEFT = 2;
-const unsigned int RIGHT = 3;
-const unsigned int TOP = 4;
-const unsigned int BOTTOM = 5;
-
 /* ======= CAMERA TYPE ======== */
 
 const unsigned int ORTHO = 0;
 const unsigned int PERSPECTIVE = 1;
 
+typedef map <string, CGFcamera> lsf_cams;
+
 class CameraValues : public SceneValues
 {
 private:
-    bool is_initial;
+    static string initial_cam_id;
     
-    string id;
-    unsigned int camera_type;
-    vector <double> perspective; /* near, far, angle */
-    vector <double> from; /* x, y, z */
-    vector <double> to; /* x, y, z */
-    vector <double> ortho; /* near, far, left, right, top, bottom*/
-
+    bool is_initial;
+    lsf_cams cams;
+    
 public:
     CameraValues();
     virtual ~CameraValues();
+    
+    bool isInitial();
     
     void addPerspectiveValues(char* attribute, char* value);
     void addFromValues(char* attribute, char* value);
@@ -57,24 +38,7 @@ public:
 
     void setID(char* newID);
     
-    void setPerspectiveNear(double newNear);
-    void setPerspectiveFar(double newFar);
-    void setPerspectiveAngle(double newAngle);
-
-    void setFromX(double newX);
-    void setFromY(double newY);
-    void setFromZ(double newZ);
-    
-    void setToX(double newX);
-    void setToY(double newY);
-    void setToZ(double newZ);
-
-    void setOrthoNear(double newNear);
-    void setOrthoFar(double newFar);
-    void setOrthoLeft(double newLeft);
-    void setOrthoRight(double newRight);
-    void setOrthoTop(double newTop);
-    void setOrthoBottom(double newBottom);
+    void static setInitialCameraID(char* newID);
 
     void apply();
     void addValues(char* element, char* attribute, char* value);

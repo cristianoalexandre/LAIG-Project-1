@@ -1,4 +1,10 @@
+#include <map>
+#include <GL/gl.h>
+
 #include "CameraValues.h"
+#include "CGFcamera.h"
+
+string CameraValues::initial_cam_id = "";
 
 CameraValues::CameraValues()
 {
@@ -56,7 +62,6 @@ void CameraValues::addPerspectiveValues(char* attribute, char* value)
         else if (!strcmp("angle", attribute))
             setPerspectiveAngle(valued);
     }
-
 }
 
 void CameraValues::addFromValues(char* attribute, char* value)
@@ -85,105 +90,49 @@ void CameraValues::addToValues(char* attribute, char* value)
 
 void CameraValues::addOrthoValues(char* attribute, char* value)
 {
+
+
     double valued = atof(value);
 
     if (!strcmp("id", attribute))
+    {
+        CGFcamera * cam = new CGFcamera();
+        cams.insert(pair((string) attribute, cam));
         setID(value);
+    }
     else
     {
         if (!strcmp("near", attribute))
-            setOrthoNear(valued);
+
         else if (!strcmp("far", attribute))
-            setOrthoFar(valued);
+            
         else if (!strcmp("left", attribute))
-            setOrthoLeft(valued);
+            
         else if (!strcmp("right", attribute))
-            setOrthoRight(valued);
-        else if (!strcmp("near", attribute))
-            setOrthoNear(valued);
-        else if (!strcmp("near", attribute))
-            setOrthoNear(valued);
-    }
+            
+        else if (!strcmp("top", attribute))
+            
+        else if (!strcmp("bottom", attribute))
+
+        }
 }
 
 void CameraValues::setID(char* newID)
 {
+    if (string(newID) == this->initial_cam_id)
+        is_initial = true;
+
     id = string(newID);
 }
 
-void CameraValues::setPerspectiveNear(double newNear)
+bool CameraValues::isInitial()
 {
-    perspective[P_NEAR] = newNear;
+    return is_initial;
 }
 
-void CameraValues::setPerspectiveFar(double newFar)
+void CameraValues::setInitialCameraID(char* newID)
 {
-    perspective[P_FAR] = newFar;
-}
-
-void CameraValues::setPerspectiveAngle(double newAngle)
-{
-    perspective[ANGLE] = newAngle;
-}
-
-void CameraValues::setFromX(double newX)
-{
-    from[X] = newX;
-}
-
-void CameraValues::setFromY(double newY)
-{
-    from[Y] = newY;
-}
-
-void CameraValues::setFromZ(double newZ)
-{
-    from[Z] = newZ;
-}
-
-void CameraValues::setToX(double newX)
-{
-    to[X] = newX;
-}
-
-void CameraValues::setToY(double newY)
-{
-    to[Y] = newY;
-}
-
-void CameraValues::setToZ(double newZ)
-{
-    to[Z] = newZ;
-}
-
-void CameraValues::setOrthoNear(double newNear)
-{
-    ortho[O_NEAR] = newNear;
-}
-
-void CameraValues::setOrthoFar(double newFar)
-{
-    ortho[O_FAR] = newFar;
-}
-
-void CameraValues::setOrthoLeft(double newLeft)
-{
-    ortho[LEFT] = newLeft;
-}
-
-void CameraValues::setOrthoRight(double newRight)
-{
-    ortho[RIGHT] = newRight;
-}
-
-void CameraValues::setOrthoTop(double newTop)
-{
-    ortho[TOP] = newTop;
-}
-
-void CameraValues::setOrthoBottom(double newBottom)
-{
-    ortho[BOTTOM] = newBottom;
+    initial_cam_id = string(newID);
 }
 
 void CameraValues::apply()
@@ -193,6 +142,8 @@ void CameraValues::apply()
 
 void CameraValues::addValues(char* element, char* attribute, char* value)
 {
+    if (!strcmp("cameras", element))
+        setInitialCameraID(value);
     if (!strcmp("perspective", element))
         addPerspectiveValues(attribute, value);
     else if (!strcmp("from", element))

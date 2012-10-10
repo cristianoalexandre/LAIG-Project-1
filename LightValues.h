@@ -2,11 +2,13 @@
 #define	LIGHTVALUES_H
 
 #include "SceneValues.h"
+#include "CGFlight.h"
 
 class LightValues : public SceneValues
 {
 private:
-
+    
+    vector <CGFlight*> lights;
 public:
     LightValues();
     virtual ~LightValues();
