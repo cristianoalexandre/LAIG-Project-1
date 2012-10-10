@@ -7,7 +7,12 @@
 #include "AppearanceValues.h"
 #include "LightValues.h"
 #include "SceneGraph.h"
+
 #include <set>
+#include <iostream>
+#include <vector>
+
+
 
 using namespace std;
 
@@ -17,13 +22,16 @@ public:
     XMLScene(char *filename);
     ~XMLScene();
 
-    static TiXmlElement *findChildByAttribute(TiXmlElement *parent, const char * attr, const char *val);
-
-	void initParser(TiXmlElement* elem);
+    void initParser(TiXmlElement* elem);
 	void parsingCycle(TiXmlElement* elem, SceneValues val);
-	void attributeParser(SceneValues val, TiXmlElement* elem);
+	void singleElementAttributeParser(SceneValues val, TiXmlElement* elem);
+	void parsingNodesCycle(TiXmlElement* elem, Node* node);
+	void nodeAttributeParser(char* name, TiXmlElement* elem, Node* no);
+	void applyRefs(TiXmlElement* elem);
 
 protected:
+
+	bool preParserCompleted;
 
 	set <TiXmlElement*> elements;
 
@@ -40,7 +48,10 @@ protected:
 	GlobalValues gv;
 	CameraValues cv;
 	LightValues lv;
-//	AppearanceValues av;
+	AppearanceValues av;
+	//SceneValues sv;
+
+	SceneGraph sGraph;
 };
 
 #endif

@@ -19,7 +19,7 @@ public:
     SceneGraph();
     SceneGraph(lsfmap &scene_map);
     
-    Node* getNodeById(char* id);
+    Node* getNodeById(string id);
     string getNodeID(Node* node);
     void addNode(Node* node);
 };

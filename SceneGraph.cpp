@@ -26,3 +26,11 @@ string SceneGraph::getNodeID(Node* node)
     
     return "";
 }
+
+Node* SceneGraph::getNodeById(string id){
+
+	Node* ola = NULL;
+
+	
+	return ola;
+}
