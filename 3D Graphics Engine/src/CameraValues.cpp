@@ -1,5 +1,4 @@
 #include <map>
-#include <GL/gl.h>
 
 #include "CameraValues.h"
 #include "CGFcamera.h"
@@ -8,8 +7,6 @@ string CameraValues::initial_cam_id = "";
 
 CameraValues::CameraValues()
 {
-
-
     /* <cameras initial="cam1" >
                 <perspective id="cam1" near="0.1" far="0.2" angle="180">
                         <from x="30" y="30" z="30" />

@@ -2,7 +2,7 @@
 
 SceneGraph::SceneGraph()
 {
-    
+
 }
 
 SceneGraph::SceneGraph(map<string, Node*> &scene_map)
@@ -23,14 +23,11 @@ string SceneGraph::getNodeID(Node* node)
         if (*(it->second) == (*node))
             return it->first;
     }
-    
+
     return "";
 }
 
-Node* SceneGraph::getNodeById(string id){
-
-	Node* ola = NULL;
-
-	
-	return ola;
+Node* SceneGraph::getNodeById(string id)
+{
+    return scene_map.at(id);
 }

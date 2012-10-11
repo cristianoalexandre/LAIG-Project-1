@@ -23,23 +23,23 @@ class CameraValues : public SceneValues
 {
 private:
     static string initial_cam_id;
-    
+
     bool is_initial;
     lsf_cams cams;
-    
+
 public:
     CameraValues();
     virtual ~CameraValues();
-    
+
     bool isInitial();
-    
+
     void addPerspectiveValues(char* attribute, char* value);
     void addFromValues(char* attribute, char* value);
     void addToValues(char* attribute, char* value);
     void addOrthoValues(char* attribute, char* value);
 
     void setID(char* newID);
-    
+
     void static setInitialCameraID(char* newID);
 
     void apply();
