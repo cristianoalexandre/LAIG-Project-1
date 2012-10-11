@@ -82,40 +82,20 @@ bool Node::operator==(Node &n)
     return id == n.getID();
 }
 
-void Node::addValues(char* elem, char* attr, char* value)
-{
+void Node::addValues(char* elem, char* attr, char* value){
 
-    string elemName = string(elem);
-    string attribute = string(elem);
+	string elemName = string(elem);
+	string attribute = string(attr);
 
-    if (elemName == "node")
-    {
-        if (attribute == "id")
-        {
-            this->setID(string(value));
-        }
-        else
-        {
-            printf("ERROR - unrecognized node attribute\n");
-        }
-    }
-    else
-    {
-        if (elemName == "scale" || elemName == "rotate" || elemName == "translate")
-        {
-            this->transforms.addValues(elem, attr, value);
-        }
-        else
-        {
-            if (elemName == "appearanceref")
-            {
-
-
-                //this->setAppearance();
-            }
-        }
-
-    }
-
-
+	if(elemName == "node"){
+		if(attribute == "id"){
+			this->setID(string(value));
+		}else{
+			printf("ERROR - unrecognized node attribute\n");
+		}
+	}else{
+		if(elemName == "scale" || elemName == "rotate" || elemName == "translate"){
+			this->transforms.addValues(elem, attr, value);
+		}
+	}
 }
