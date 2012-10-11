@@ -1,10 +1,12 @@
 #ifndef TRANSFORMVALUES_H
 #define TRANSFORMVALUES_H
 
-
 #include "SceneValues.h"
+
 #include <map>
 #include <string>
+#include <cstring>
+#include <cstdlib>
 
 using namespace std;
 

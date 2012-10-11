@@ -1,54 +1,65 @@
 #include "TransformValues.h"
 
-
-
-TransformValues::TransformValues(){
-
-}
-
-void TransformValues::addValues(char* elem, char* attr, char* val){
-
-	string tmp = string(elem);
-	if(tmp == "scale"){
-		addScalingValues(attr, val);
-	}else{
-		if(tmp == "rotate"){
-			addRotationValues(attr,val);
-		}else{
-			if(tmp == "translate"){
-				addTranslationValues(attr, val);
-			}
-		}
-	}
+TransformValues::TransformValues()
+{
 
 }
 
-void TransformValues::addScalingValues(char* attr, char* val){
+void TransformValues::addValues(char* elem, char* attr, char* val)
+{
 
-	string key = string(attr);
-	double value = atof(val);
-	pair<string,double> pair(key,value);
+    string tmp = string(elem);
+    if (tmp == "scale")
+    {
+        addScalingValues(attr, val);
+    }
+    else
+    {
+        if (tmp == "rotate")
+        {
+            addRotationValues(attr, val);
+        }
+        else
+        {
+            if (tmp == "translate")
+            {
+                addTranslationValues(attr, val);
+            }
+        }
+    }
 
-	this->scale.insert(pair);
 }
 
-void TransformValues::addRotationValues(char* attr, char* val){
+void TransformValues::addScalingValues(char* attr, char* val)
+{
 
-	string key = string(attr);
-	double value = atof(val);
-	pair<string,double> pair(key,value);
+    string key = string(attr);
+    double value = atof(val);
+    pair<string, double> pair(key, value);
 
-	this->rotate.insert(pair);
+    this->scale.insert(pair);
 }
 
-void TransformValues::addTranslationValues(char* attr, char* val){
+void TransformValues::addRotationValues(char* attr, char* val)
+{
 
-	string key = string(attr);
-	double value = atof(val);
-	pair<string,double> pair(key,value);
+    string key = string(attr);
+    double value = atof(val);
+    pair<string, double> pair(key, value);
 
-	this->translate.insert(pair);
+    this->rotate.insert(pair);
 }
 
-void TransformValues::apply(){
+void TransformValues::addTranslationValues(char* attr, char* val)
+{
+
+    string key = string(attr);
+    double value = atof(val);
+    pair<string, double> pair(key, value);
+
+    this->translate.insert(pair);
+}
+
+void TransformValues::apply()
+{
 }
