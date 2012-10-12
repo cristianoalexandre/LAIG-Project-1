@@ -2,11 +2,13 @@
 #define	GLOBALVALUES_H
 
 #include "SceneValues.h"
+#include "CGFscene.h"
 
 #include <string>
 #include <vector>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 
 using namespace std;
 
@@ -29,7 +31,7 @@ const unsigned int ENABLED = 2;
 class GlobalValues : public SceneValues
 {
 private:
-    vector <int> background; /* R,G,B,A */
+    vector <float> background; /* R,G,B,A */
     vector <string> polygon; /* mode, shading */
     vector <string> culling; /* frontfaceorder, cullface, enabled */
 
@@ -39,10 +41,10 @@ public:
     void addPolygonValues(char* attribute, char* value);
     void addCullingValues(char* attribute, char* value);
 
-    void setBackgroundR(int newR);
-    void setBackgroundG(int newG);
-    void setBackgroundB(int newB);
-    void setBackgroundA(int newA);
+    void setBackgroundR(float newR);
+    void setBackgroundG(float newG);
+    void setBackgroundB(float newB);
+    void setBackgroundA(float newA);
     void setPolygonMode(char* new_mode);
     void setPolygonShading(char* new_mode);
     void setCullingFrontFaceOrder(char* new_frontfaceorder);
