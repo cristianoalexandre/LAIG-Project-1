@@ -13,7 +13,7 @@ void XMLScene::singleElementAttributeParser(SceneValues val, TiXmlElement* elem)
 		char* tmp = (char*) attr->Value();
 		char* attrName = (char*) attr->Name();
 
-		//val.addAttributes;
+		//val.addValues(name, attrName, tmp);
 		printf("attribute %s = %s\n", attrName, tmp);
 		attr = attr->Next();
 	}
@@ -110,18 +110,17 @@ void XMLScene::applyRefs(TiXmlElement* elem){
 			printf("parentName = %s\n", parentName);
 			if(!strcmp(parentName, "node")){
 
-				string ola = "a";
-				char* id;
-				char* val;
+				char* idParent;
+				char* idChild;
 				TiXmlElement* tmpElem;
+
 				tmpElem = e1->ToElement();
-				id = (char*) tmpElem->Attribute("id");
-				val = (char*) elem->FirstAttribute()->Value();
-				printf("id = %s\nval = %s\n",id,val);
+				idParent = (char*) tmpElem->Attribute("id");
+				idChild = (char*) elem->FirstAttribute()->Value();
 
+				printf("id = %s\nval = %s\n",idParent,idChild);
 
-				this->sGraph.getNodeById(string(id))->addChild(this->sGraph.getNodeById(string(val)));
-				cin >> ola;
+				//this->sGraph.getNodeById(string(idParent))->addChild(this->sGraph.getNodeById(string(idChild)));
 				break;
 			}else{
 				e1 = e2;
@@ -174,30 +173,19 @@ void XMLScene::initParser(TiXmlElement* elem){
 						if(*it == this->graphElement){ // parsing cycle not yet fully implemented for this type of TiXmlElement
 							Node* no = NULL;
 							parsingNodesCycle(elem, no); //for now, only for compliling and debugging purposes
-						}else{
-							if(*it == this->nodesElement){ // parsing cycle not yet fully implemented for this type of TiXmlElement
-								SceneValues val;
-								parsingCycle(elem, val); //for now, only for compliling and debugging purposes
-							}else{
-
-							}
 						}
 					}
 				}
 			}
 		}
 	}else{
-		SceneValues val;
-		parsingCycle(elem, val); //for now, only for compliling and debugging purposes
+		printf("Element %s not found\n", (char*)elem->Value());
 	}
 }
 
 
 XMLScene::XMLScene(char *filename)
 {
-
-
-
 	doc = new TiXmlDocument(filename);
 	bool loadOkay = doc->LoadFile();
 
@@ -253,16 +241,19 @@ XMLScene::XMLScene(char *filename)
 	}else{
 	initParser(appearancesElement);
 	}
-
-
-
+	*/
 	if (graphElement == NULL)
 	printf("Graph block not found!\n");
 	else {
 	initParser(graphElement);
-	}*/
+	}
+
+
 
 	applyRefs(graphElement);
+
+	string ola;
+	cin >> ola;
 
 }
 
