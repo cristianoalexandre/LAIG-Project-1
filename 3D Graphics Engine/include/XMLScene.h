@@ -7,6 +7,7 @@
 #include "AppearanceValues.h"
 #include "LightValues.h"
 #include "SceneGraph.h"
+#include "CGFscene.h"
 
 #include <set>
 #include <iostream>
@@ -16,24 +17,24 @@
 
 using namespace std;
 
-class XMLScene
+class XMLScene : public CGFscene
 {
 public:
     XMLScene(char *filename);
-    ~XMLScene();
+    virtual ~XMLScene();
 
     void initParser(TiXmlElement* elem);
-	void parsingCycle(TiXmlElement* elem, SceneValues val);
-	void singleElementAttributeParser(SceneValues val, TiXmlElement* elem);
-	void parsingNodesCycle(TiXmlElement* elem, Node* node);
-	void nodeAttributeParser(char* name, TiXmlElement* elem, Node* no);
-	void applyRefs(TiXmlElement* elem);
-
+    void parsingCycle(TiXmlElement* elem, SceneValues &val);
+    void singleElementAttributeParser(SceneValues &val, TiXmlElement* elem);
+    void parsingNodesCycle(TiXmlElement* elem, Node* node);
+    void nodeAttributeParser(char* name, TiXmlElement* elem, Node* no);
+    void applyRefs(TiXmlElement* elem);
+    void display();
 protected:
 
-	bool preParserCompleted;
+    bool preParserCompleted;
 
-	set <TiXmlElement*> elements;
+    set <TiXmlElement*> elements;
 
     TiXmlDocument* doc;
 
@@ -45,13 +46,13 @@ protected:
     TiXmlElement* nodesElement;
     TiXmlElement* graphElement;
 
-	GlobalValues gv;
-	CameraValues cv;
-	LightValues lv;
-	AppearanceValues av;
-	//SceneValues sv;
+    GlobalValues gv;
+    CameraValues cv;
+    LightValues lv;
+    AppearanceValues av;
+    //SceneValues sv;
 
-	SceneGraph sGraph;
+    SceneGraph sGraph;
 };
 
 #endif

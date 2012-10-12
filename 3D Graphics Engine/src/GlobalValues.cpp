@@ -19,16 +19,21 @@ GlobalValues::GlobalValues()
 
 void GlobalValues::addBackgroundValues(char* attribute, char* value)
 {
-    int value_int = atoi(value);
+    float value_int = atof(value);
 
-    if (!strcmp("R", attribute))
+    if (!strcmp("r", attribute))
         setBackgroundR(value_int);
-    else if (!strcmp("G", attribute))
+    else if (!strcmp("g", attribute))
         setBackgroundG(value_int);
-    else if (!strcmp("B", attribute))
+    else if (!strcmp("b", attribute))
         setBackgroundB(value_int);
-    else if (!strcmp("A", attribute))
+    else if (!strcmp("a", attribute))
         setBackgroundA(value_int);
+    else
+    {
+        cout << "Background: unknown attribute -> " << attribute << endl;
+        exit(1);
+    }
 }
 
 void GlobalValues::addCullingValues(char* attribute, char* value)
@@ -39,6 +44,11 @@ void GlobalValues::addCullingValues(char* attribute, char* value)
         setCullingCullface(value);
     else if (!strcmp("enabled", attribute))
         setCullingEnabled(value);
+    else
+    {
+        cout << "Culling: unknown attribute -> " << attribute << endl;
+        exit(1);
+    }
 }
 
 void GlobalValues::setBackgroundA(float newA)
@@ -81,6 +91,11 @@ void GlobalValues::setPolygonMode(char* new_mode)
     polygon.at(MODE) = string(new_mode);
 }
 
+void GlobalValues::setPolygonShading(char* new_mode)
+{
+    polygon.at(SHADING) = string(new_mode);
+}
+
 void GlobalValues::apply()
 {
     glClearColor(background[R], background[G], background[B], background[A]);
@@ -102,13 +117,13 @@ void GlobalValues::apply()
         exit(1);
     }
 
-    if (polygon[SHADING] == "goraud")
+    if (polygon[SHADING] == "gouraud")
         polygon_shading = GL_SMOOTH;
     else if (polygon[SHADING] == "flat")
         polygon_shading = GL_FLAT;
     else
     {
-        cerr << "ERROR: unknown polygon shading";
+        cerr << "ERROR: unknown polygon shading - " << polygon[SHADING];
         exit(1);
     }
 
@@ -147,14 +162,34 @@ void GlobalValues::apply()
 
 }
 
-void GlobalValues::addValues(char* element, char* attribute, char* value)
+
+void GlobalValues::addPolygonValues(char* attribute, char* value)
 {
+    if (!strcmp("mode", attribute))
+        setPolygonMode(value);
+    else if (!strcmp("shading",attribute))
+        setPolygonShading(value);
+    else
+    {
+        cout << "Polygon: unknown attribute -> " << attribute << endl;
+        exit(1);
+    }
+}
+
+void GlobalValues::addValues(char* element, char* attribute, char* value)
+{    
     if (!strcmp("background", element))
+    {
         addBackgroundValues(attribute, value);
+    }
     else if (!strcmp("polygon", element))
-        addBackgroundValues(attribute, value);
+    {
+        addPolygonValues(attribute, value);
+    }
     else if (!strcmp("culling", element))
-        addBackgroundValues(attribute, value);
+    {
+        addCullingValues(attribute, value);
+    }
     else
     {
         cerr << "ERROR: globalvalues -> unknown element";
