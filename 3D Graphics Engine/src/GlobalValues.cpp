@@ -10,7 +10,7 @@ GlobalValues::GlobalValues()
     background.push_back(0);
 
     polygon.push_back("fill");
-    polygon.push_back("goraud");
+    polygon.push_back("gouraud");
 
     culling.push_back("CCW");
     culling.push_back("back");

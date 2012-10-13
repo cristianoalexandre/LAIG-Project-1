@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <set>
 
+#include "Primitive.h"
 #include "Rectangle.h"
 #include "Cylinder.h"
 #include "Torus.h"

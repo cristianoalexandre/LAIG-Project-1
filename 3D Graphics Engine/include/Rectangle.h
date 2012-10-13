@@ -4,7 +4,7 @@
 #include "Primitive.h"
 
 
-class Rectangle: protected Primitive
+class Rectangle: public Primitive
 {
 private:
 	Vertex2D upperLeftVertex;

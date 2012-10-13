@@ -3,7 +3,7 @@
 
 #include "Primitive.h"
 
-class Triangle: protected Primitive
+class Triangle: public Primitive
 {
 private:
 	Vertex3D left;

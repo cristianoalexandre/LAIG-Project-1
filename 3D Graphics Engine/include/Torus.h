@@ -3,7 +3,7 @@
 
 #include "Primitive.h"
 
-class Torus: protected Primitive
+class Torus: public Primitive
 {
 private:
 	float innerRadius;

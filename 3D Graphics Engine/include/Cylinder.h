@@ -3,7 +3,7 @@
 
 #include "Primitive.h"
 
-class Cylinder: protected Primitive
+class Cylinder: public Primitive
 {
 private:
 	float baseRadius;

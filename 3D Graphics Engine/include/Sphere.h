@@ -3,7 +3,7 @@
 
 #include "Primitive.h"
 
-class Sphere: protected Primitive
+class Sphere: public Primitive
 {
 private:
 	float radius;

@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <queue>
 #include <iostream>
+#include <cstdio>
 
 using namespace std;
 
