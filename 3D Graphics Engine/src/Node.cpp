@@ -153,6 +153,7 @@ void Node::draw(){
 
 	//glPushMatrix();
 
+//	cout << "Node ID = " << this->getID() << endl;
 	this->transforms.apply();
 
 

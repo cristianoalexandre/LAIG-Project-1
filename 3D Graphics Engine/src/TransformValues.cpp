@@ -7,125 +7,161 @@ TransformValues::TransformValues()
 
 void TransformValues::addValues(char* elem, char* attr, char* val)
 {
-
-    string tmp = string(elem);
-    if (tmp == "scale")
-    {
-        addScalingValues(attr, val);
-    }
-    else
-    {
-        if (tmp == "rotate")
-        {
-            addRotationValues(attr, val);
-        }
-        else
-        {
-            if (tmp == "translate")
-            {
-                addTranslationValues(attr, val);
-            }
-        }
-    }
+	cout << "ADDING VALUES" << endl;
+	string tmp = string(elem);
+	if (tmp == "scale")
+	{
+		addScalingValues(attr, val);
+	}
+	else
+	{
+		if (tmp == "rotate")
+		{
+			addRotationValues(attr, val);
+		}
+		else
+		{
+			if (tmp == "translate")
+			{
+				addTranslationValues(attr, val);
+			}
+		}
+	}
 
 }
 
 void TransformValues::addScalingValues(char* attr, char* val)
 {
 
-    string key = string(attr);
-    float value = atof(val);
-    pair<string, float> pair(key, value);
+	string key = string(attr);
+	float value = atof(val);
 
-    this->scale.insert(pair);
+	switch(key[0]){
+	case 'x':
+		{
+			this->scale[0] = atof(val);
+			break;
+		}
+	case 'y':
+		{
+			this->scale[1] = atof(val);
+			break;
+		}
+	case 'z':
+		{
+			this->scale[2] = atof(val);
+
+			pair<string,float*> p("scale",this->scale);
+			this->order.push_back(p);
+			break;
+		}
+	default:
+		{
+			printf("ERROR! in Scale Element -> Unrecognized attribute: '%s'\nPress any key to exit\n", attr);
+			break;
+		}
+	}
+
 }
 
 void TransformValues::addRotationValues(char* attr, char* val)
 {
-
-    string key = string(attr);
+	string key = string(attr);
 	string value = string(val);
 
 	if(key == "axis"){
-		pair<string,float> x;
-		pair<string,float> y;
-		pair<string,float> z;
-		switch(val[0]){
-			case 'x':
+		switch(value[0]){
+		case 'x':
 			{
-				x.first = "x";
-				x.second = 1;
-				y.first = "y";
-				y.second = 0;
-				z.first = "z";
-				z.second = 0;
-				this->rotate.insert(x);
-				this->rotate.insert(y);
-				this->rotate.insert(z);
+				this->rotate[1] = 1;
+				this->rotate[2] = 0;
+				this->rotate[3] = 0;
 				break;
 			}
-			case 'y':
+		case 'y':
 			{
-				x.first = "x";
-				x.second = 0;
-				y.first = "y";
-				y.second = 1;
-				z.first = "z";
-				z.second = 0;
-				this->rotate.insert(x);
-				this->rotate.insert(y);
-				this->rotate.insert(z);
+				this->rotate[1] = 0;
+				this->rotate[2] = 1;
+				this->rotate[3] = 0;
 				break;
 			}
-			case 'z':
+		case 'z':
 			{
-				x.first = "x";
-				x.second = 0;
-				y.first = "y";
-				y.second = 0;
-				z.first = "z";
-				z.second = 1;
-				this->rotate.insert(x);
-				this->rotate.insert(y);
-				this->rotate.insert(z);
+				this->rotate[1] = 0;
+				this->rotate[2] = 0;
+				this->rotate[3] = 1;
+
+				pair<string,float*> p("rotation",this->scale);
+				this->order.push_back(p);
 				break;
 			}
-			default:
+		default:
 			{
-				printf("ERROR! in Rotate Element -> Unrecognized axis attribute: '%s'\nPress any key to exit\n", val);
+				printf("ERROR! in Rotate Element -> Unrecognized axis value: '%s'\nPress any key to exit\n", val);
 				break;
 			}
 		}
 	}else{
 		if(key == "angle"){
 
-			pair<string,float> p(key, atof(val));
-			this->rotate.insert(p);
+			this->rotate[0] = atof(val);
 		}else{
-			printf("ERROR! in Rotate Element -> unrecognized attribute name: '%s'\nPress any key to exit\n", attr);
+			printf("ERROR! in Rotate Element -> Unrecognized attribute: '%s'\nPress any key to exit\n", attr);
 		}
+
 	}
 }
 
 void TransformValues::addTranslationValues(char* attr, char* val)
 {
+	string key = string(attr);
+	float value = atof(val);
 
-    string key = string(attr);
-    float value = atof(val);
-    pair<string, float> pair(key, value);
+	switch(key[0]){
+	case 'x':
+		{
+			this->translate[0] = atof(val);
+			break;
+		}
+	case 'y':
+		{
+			this->translate[1] = atof(val);
+			break;
+		}
+	case 'z':
+		{
+			this->translate[2] = atof(val);
 
-    this->translate.insert(pair);
+			pair<string,float*> p("translation",this->scale);
+			this->order.push_back(p);
+			break;
+		}
+	default:
+		{
+			printf("ERROR! in Translation Element -> Unrecognized attribute: '%s'\nPress any key to exit\n", attr);
+			break;
+		}
+	}
 }
 
 void TransformValues::apply()
 {
-		if(!this->scale.empty()){
-			glScalef(this->scale["x"], this->scale["y"], this->scale["z"]);
+	
+	for(size_t i = 0; i < this->order.size(); i++){
+
+		
+		string type = this->order[i].first;
+
+		if(type == "scale"){
+			glScalef(this->scale[0], this->scale[1], this->scale[2]);
 		}
-		if(!this->translate.empty()){
-			glTranslatef(this->translate["x"], this->translate["y"], this->translate["<"]);
+		if(type == "translation"){
+			glTranslatef(this->translate[0], this->translate[1], this->translate[2]);
 		}
-		if(!this->rotate.empty()){
-			glRotatef(this->rotate["angle"], this->rotate["x"], this->rotate["y"], this->rotate["z"]);
+		if(type == "rotation"){
+			glRotatef(this->rotate[0], this->rotate[1], this->rotate[2], this->rotate[3]);		
 		}
+		
+		
+	}
 }

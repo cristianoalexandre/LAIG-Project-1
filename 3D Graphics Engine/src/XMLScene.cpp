@@ -4,9 +4,9 @@ void XMLScene::singleElementAttributeParser(SceneValues &val, TiXmlElement* elem
 {
 
 	char* name = (char*) elem->Value();
-	printf("parsing %s element:\n", name);
+	printf("\nParsing %s element:\n\n", name);
 
-	printf("parsing attributes:\n");
+	printf("Parsing attributes:\n");
 	TiXmlAttribute* attr = elem->FirstAttribute();
 	while (attr != NULL)
 	{
@@ -15,7 +15,7 @@ void XMLScene::singleElementAttributeParser(SceneValues &val, TiXmlElement* elem
 		char* attrName = (char*) attr->Name();
 
 		val.addValues(name, attrName, tmp);
-		printf("attribute %s = %s\n", attrName, tmp);
+		printf("Attribute %s = %s\n", attrName, tmp);
 		attr = attr->Next();
 	}
 }
@@ -28,7 +28,7 @@ void XMLScene::parsingCycle(TiXmlElement* elem, SceneValues &val)
 	TiXmlElement* child = elem->FirstChildElement();
 	if (child == NULL)
 	{
-		printf("no more children\n");
+		printf("no more children\n\n-------------------------------------------------\n\n");
 		return;
 	}
 	else
@@ -46,7 +46,7 @@ void XMLScene::parsingCycle(TiXmlElement* elem, SceneValues &val)
 void XMLScene::nodeAttributeParser(char* name, TiXmlElement* elem, Node* no)
 {
 
-	printf("parsing attributes:\n");
+	printf("Parsing attributes:\n");
 	TiXmlAttribute* attr = elem->FirstAttribute();
 	while (attr != NULL)
 	{
@@ -59,7 +59,7 @@ void XMLScene::nodeAttributeParser(char* name, TiXmlElement* elem, Node* no)
 			no->addValues(name, attrName, tmp);	
 		}
 
-		printf("attribute %s = %s\n", attrName, tmp);
+		printf("Attribute %s = %s\n", attrName, tmp);
 		attr = attr->Next();
 	}
 }
@@ -68,7 +68,7 @@ void XMLScene::parsingNodesCycle(TiXmlElement* elem, Node* node)
 {
 
 	char* name = (char*) elem->Value();
-	printf("parsing %s element:\n", name);
+	printf("\nParsing %s element:\n\n", name);
 
 	TiXmlElement* child = elem->FirstChildElement();
 
@@ -78,25 +78,31 @@ void XMLScene::parsingNodesCycle(TiXmlElement* elem, Node* node)
 
 		node = new Node();
 		nodeAttributeParser(name, elem, node);
-		parsingNodesCycle(child, node);
-		this->sGraph.addNode(node);
-	}
-
-	nodeAttributeParser(name, elem, node);
-
-	if (child == NULL)
-	{
-		printf("no more children\n");
-		return;
-	}
-	else
-	{
-		while (child != NULL)
-		{
+		while (child != NULL){
 			parsingNodesCycle(child, node);
 			child = child->NextSiblingElement();
 		}
+		this->sGraph.addNode(node);
+	}else{
+
+		nodeAttributeParser(name, elem, node);
+
+		if (child == NULL)
+		{
+			printf("no more children\n\n--------------------------------------------------\n\n");
+			printf("\nEnded Parsing %s element:\n\n", name);
+			return;
+		}
+		else
+		{
+			while (child != NULL)
+			{
+				parsingNodesCycle(child, node);
+				child = child->NextSiblingElement();
+			}
+		}
 	}
+	printf("\n Ended Parsing %s element:\n\n", name);
 	return;
 }
 
@@ -104,8 +110,6 @@ void XMLScene::applyRefs(TiXmlElement* elem)
 {
 
 	char* name = (char*) elem->Value();
-	printf("NAME = %s\n", name);
-
 
 	if (string(name) == "noderef")
 	{
@@ -118,7 +122,6 @@ void XMLScene::applyRefs(TiXmlElement* elem)
 		{
 			e2 = e1->Parent();
 			parentName = (char*) e1->Value();
-			printf("parentName = %s\n", parentName);
 
 			if (!strcmp(parentName, "node"))
 			{
@@ -130,8 +133,6 @@ void XMLScene::applyRefs(TiXmlElement* elem)
 				tmpElem = e1->ToElement();
 				idParent = (char*) tmpElem->Attribute("id");
 				idChild = (char*) elem->FirstAttribute()->Value();
-
-				printf("id = %s\nval = %s\n", idParent, idChild);
 
 				this->sGraph.getNodeById(string(idParent))->addChild(this->sGraph.getNodeById(string(idChild)));
 
@@ -148,7 +149,6 @@ void XMLScene::applyRefs(TiXmlElement* elem)
 	TiXmlElement* child = elem->FirstChildElement();
 	if (child == NULL)
 	{
-		printf("no more children\n");
 		return;
 	}
 	else
@@ -291,6 +291,7 @@ XMLScene::XMLScene(char *filename)
 		initParser(graphElement);
 	}
 
+	printf("\n\nAPPLYING REFERENCES\n\n");
 	applyRefs(graphElement);
 
 	this->sGraph.printNodesID();
@@ -326,9 +327,9 @@ void XMLScene::display()
 
 void XMLScene::drawScene(Node* root){
 
-	//*glPushMatrix();
+	glPushMatrix();
 	root->draw();
-	
+	//cin.get();
 	if(root->hasChildren()){
 
 		vector<Node*>* children = root->getChildren();
@@ -337,22 +338,21 @@ void XMLScene::drawScene(Node* root){
 		for(it = children->begin(); it != children->end(); it++){
 
 			//if((*it)->getAppearance() == NULL){			
-			glPushMatrix();
-				drawScene(*it);
-			glPopMatrix();
+			drawScene(*it);
+			
 			/*}else{
-				this->nodeInOrderOfProcessing.push(*it);
+			this->nodeInOrderOfProcessing.push(*it);
 			}*/
 		}
 	}
 	/*
 	if(root->getID() == "root"){
-		while(!this->nodeInOrderOfProcessing.empty()){
-			drawScene(this->nodeInOrderOfProcessing.front());
-			nodeInOrderOfProcessing.pop();
-		}
+	while(!this->nodeInOrderOfProcessing.empty()){
+	drawScene(this->nodeInOrderOfProcessing.front());
+	nodeInOrderOfProcessing.pop();
+	}
 	}*/
-	//glPopMatrix();
+	glPopMatrix();
 }
 
 

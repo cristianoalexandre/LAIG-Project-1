@@ -8,16 +8,21 @@
 #include <string>
 #include <cstring>
 #include <cstdlib>
+#include <queue>
+#include <iostream>
 
 using namespace std;
+
+
 
 class TransformValues : public SceneValues
 {
 private:
-
-	map<string, float> scale;
-	map<string, float> translate;
-	map<string, float> rotate;
+	float scale[3];
+	float translate[3];
+	float rotate[4];
+	
+	vector< pair<string, float*> > order;
 
 public:
 	TransformValues();
