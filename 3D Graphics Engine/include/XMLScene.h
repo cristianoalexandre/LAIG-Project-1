@@ -12,7 +12,8 @@
 #include <set>
 #include <iostream>
 #include <vector>
-
+#include <stack>
+#include <queue>
 
 
 using namespace std;
@@ -30,11 +31,14 @@ public:
     void nodeAttributeParser(char* name, TiXmlElement* elem, Node* no);
     void applyRefs(TiXmlElement* elem);
     void display();
+	void drawScene(Node* root);
 protected:
 
     bool preParserCompleted;
 
     set <TiXmlElement*> elements;
+	queue<Node*> nodeInOrderOfProcessing;
+	stack<Primitive*> toDraw;
 
     TiXmlDocument* doc;
 

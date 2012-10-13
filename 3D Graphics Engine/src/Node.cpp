@@ -7,6 +7,24 @@ Node::Node()
 {
     id = "not defined";
     appearance = NULL;
+
+	Rectangle* rect = new Rectangle();
+	pair<string, Primitive*> rectangle("rectangle",rect);
+	Triangle* tri = new Triangle();
+	pair<string, Primitive*> triangle("triangle",tri);
+	Cylinder* cyl = new Cylinder();
+	pair<string, Primitive*> cylinder("cylinder",cyl);
+	Sphere* sph = new Sphere();
+	pair<string, Primitive*> sphere("sphere",sph);
+	Torus* tor = new Torus();
+	pair<string, Primitive*> torus("torus",tor);
+
+	this->primitiveTypes.insert(rectangle);
+	this->primitiveTypes.insert(triangle);
+	this->primitiveTypes.insert(cylinder);
+	this->primitiveTypes.insert(sphere);
+	this->primitiveTypes.insert(torus);
+
 }
 
 Node::Node(char* node_id)
@@ -74,7 +92,7 @@ void Node::setAppearance(CGFappearance* appearance)
 
 string Node::getID()
 {
-    return id;
+    return this->id;
 }
 
 bool Node::operator==(Node &n)
@@ -94,8 +112,58 @@ void Node::addValues(char* elem, char* attr, char* value){
 			printf("ERROR - unrecognized node attribute\n");
 		}
 	}else{
+		if(elemName == "rectangle"){
+			map<string,Primitive*>::iterator it = primitiveTypes.find("rectangle");
+			if(it->second->addValues(attr, string(value))){
+				printf("ADICIONOU PRIMITIVA\n");
+				this->addPrimitive(it->second);
+			}
+		}
+
+
 		if(elemName == "scale" || elemName == "rotate" || elemName == "translate"){
 			this->transforms.addValues(elem, attr, value);
 		}
 	}
+}
+
+vector<Node*>* Node::getChildren(){
+
+	vector<Node*>* ptrChildren = &this->children;
+	return ptrChildren;
+}
+
+bool Node::hasChildren(){
+
+	return !(this->getChildren()->empty());
+}
+
+CGFappearance* Node::getAppearance(){
+
+	return this->appearance;
+
+}
+
+void Node::draw(){
+
+	glPushMatrix();
+
+		this->transforms.apply();
+
+
+		vector<Primitive*>::iterator iti = this->primitives.begin();
+		vector<Primitive*>::iterator itf = this->primitives.end();
+
+		while(iti != itf){
+			(*iti)->draw();
+			iti++;
+		}
+	glPopMatrix();
+
+}
+
+
+void Node::addPrimitive(Primitive* prim){
+
+	this->primitives.push_back(prim);
 }

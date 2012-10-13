@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <iostream>
 
 #include "Node.h"
 
@@ -15,13 +16,16 @@ class SceneGraph
 private:
     lsfmap scene_map;
     
+
 public:
+    
     SceneGraph();
     SceneGraph(lsfmap &scene_map);
     
     Node* getNodeById(string id);
     string getNodeID(Node* node);
     void addNode(Node* node);
+	void printNodesID();
 };
 
 #endif	/* SCENEGRAPH_H */

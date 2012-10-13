@@ -4,8 +4,13 @@
 #include <vector>
 #include <string>
 #include <cstdio>
+#include <set>
 
-#include "Figure.h"
+#include "Rectangle.h"
+#include "Cylinder.h"
+#include "Torus.h"
+#include "Triangle.h"
+#include "Sphere.h"
 #include "CGFappearance.h"
 #include "CGFobject.h"
 #include "TransformValues.h"
@@ -13,16 +18,16 @@
 
 using namespace std;
 
-class Node : public CGFobject
+class Node
 {
 private:
     string id;
     vector <Node*> children;
-    vector <Figure*> primitives;
+    vector <Primitive*> primitives;
+	map<string, Primitive*> primitiveTypes;
     int transf_matrix[4][4];
     CGFappearance* appearance;
     TransformValues transforms;
-
 public:
     Node();
     Node(char* node_id);
@@ -35,8 +40,14 @@ public:
     bool seekNonExistentChildren();
     Node* getChildByID(char* id);
     Node* getChildByID(string id);
+	CGFappearance* getAppearance();
+	vector<Node*>* getChildren();
+	bool hasChildren();
+	void draw();
 
     void addValues(char* elem, char* attr, char* value);
+
+	void addPrimitive(Primitive* prim);
 
     bool operator==(Node &n);
 

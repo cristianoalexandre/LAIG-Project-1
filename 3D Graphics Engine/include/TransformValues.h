@@ -2,6 +2,7 @@
 #define TRANSFORMVALUES_H
 
 #include "SceneValues.h"
+#include "CGFobject.h"
 
 #include <map>
 #include <string>
@@ -14,9 +15,9 @@ class TransformValues : public SceneValues
 {
 private:
 
-	map<string, double> scale;
-	map<string, double> translate;
-	map<string, double> rotate;
+	map<string, float> scale;
+	map<string, float> translate;
+	map<string, float> rotate;
 
 public:
 	TransformValues();

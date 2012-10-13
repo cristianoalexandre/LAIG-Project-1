@@ -1,6 +1,7 @@
 #ifndef SCENEVALUES_H
 #define	SCENEVALUES_H
 
+
 class SceneValues
 {
 public:

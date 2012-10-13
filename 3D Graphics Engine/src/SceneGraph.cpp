@@ -31,3 +31,16 @@ Node* SceneGraph::getNodeById(string id)
 {
     return scene_map.at(id);
 }
+
+
+void SceneGraph::printNodesID(){
+
+	lsfmap::iterator iti = this->scene_map.begin();
+	lsfmap::iterator itf = this->scene_map.end();
+
+	while(iti != itf){
+
+		cout << "ID = " << (*iti).second->getID() << endl;
+		iti++;
+	}
+}
