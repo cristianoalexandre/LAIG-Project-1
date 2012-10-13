@@ -38,8 +38,7 @@ protected:
 
     set <TiXmlElement*> elements;
 	queue<Node*> nodeInOrderOfProcessing;
-	stack<Primitive*> toDraw;
-
+	
     TiXmlDocument* doc;
 
     TiXmlElement* globalsElement;

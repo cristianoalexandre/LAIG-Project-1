@@ -4,6 +4,8 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <queue>
+#include <stack>
 
 #include "Node.h"
 
@@ -15,7 +17,8 @@ class SceneGraph
 {
 private:
     lsfmap scene_map;
-    
+	queue<Node*> nodeInOrderOfProcessing;
+    stack<Primitive*> toDraw;
 
 public:
     
@@ -26,6 +29,7 @@ public:
     string getNodeID(Node* node);
     void addNode(Node* node);
 	void printNodesID();
+	void drawCycle(Node* root);
 };
 
 #endif	/* SCENEGRAPH_H */

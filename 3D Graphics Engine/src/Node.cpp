@@ -5,8 +5,8 @@
 
 Node::Node()
 {
-    id = "not defined";
-    appearance = NULL;
+	id = "not defined";
+	appearance = NULL;
 
 	Rectangle* rect = new Rectangle();
 	pair<string, Primitive*> rectangle("rectangle",rect);
@@ -29,75 +29,75 @@ Node::Node()
 
 Node::Node(char* node_id)
 {
-    id = string(node_id);
-    appearance = NULL;
+	id = string(node_id);
+	appearance = NULL;
 }
 
 Node::Node(string node_id)
 {
-    id = node_id;
-    appearance = NULL;
+	id = node_id;
+	appearance = NULL;
 }
 
 void Node::setID(string ID)
 {
-    this->id = ID;
+	this->id = ID;
 }
 
 void Node::addChild(Node* child)
 {
-    children.push_back(child);
+	children.push_back(child);
 }
 
 Node* Node::getChildByID(char* id)
 {
-    return getChildByID(string(id));
+	return getChildByID(string(id));
 }
 
 Node* Node::getChildByID(string id)
 {
-    for (vector <Node*>::iterator it = children.begin(); it != children.end(); it++)
-    {
-        if ((*it)->getID() == id)
-        {
-            return (*it);
-        }
-    }
+	for (vector <Node*>::iterator it = children.begin(); it != children.end(); it++)
+	{
+		if ((*it)->getID() == id)
+		{
+			return (*it);
+		}
+	}
 
-    return NULL;
+	return NULL;
 }
 
 int Node::getNumberOfChildren()
 {
-    return children.size();
+	return children.size();
 }
 
 bool Node::seekNonExistentChildren()
 {
-    for (size_t i = 0; i < children.size(); i++)
-    {
-        if (children.at(i) == NULL)
-        {
-            return true;
-        }
-    }
+	for (size_t i = 0; i < children.size(); i++)
+	{
+		if (children.at(i) == NULL)
+		{
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 void Node::setAppearance(CGFappearance* appearance)
 {
-    this->appearance = appearance;
+	this->appearance = appearance;
 }
 
 string Node::getID()
 {
-    return this->id;
+	return this->id;
 }
 
 bool Node::operator==(Node &n)
 {
-    return id == n.getID();
+	return id == n.getID();
 }
 
 void Node::addValues(char* elem, char* attr, char* value){
@@ -127,6 +127,11 @@ void Node::addValues(char* elem, char* attr, char* value){
 	}
 }
 
+void Node::addPrimitive(Primitive* prim){
+
+	this->primitives.push_back(prim);
+}
+
 vector<Node*>* Node::getChildren(){
 
 	vector<Node*>* ptrChildren = &this->children;
@@ -146,24 +151,20 @@ CGFappearance* Node::getAppearance(){
 
 void Node::draw(){
 
-	glPushMatrix();
+	//glPushMatrix();
 
-		this->transforms.apply();
+	this->transforms.apply();
 
 
-		vector<Primitive*>::iterator iti = this->primitives.begin();
-		vector<Primitive*>::iterator itf = this->primitives.end();
+	vector<Primitive*>::iterator iti = this->primitives.begin();
+	vector<Primitive*>::iterator itf = this->primitives.end();
 
-		while(iti != itf){
-			(*iti)->draw();
-			iti++;
-		}
-	glPopMatrix();
+	while(iti != itf){
+		(*iti)->draw();
+		iti++;
+	}
+	//glPopMatrix();
 
 }
 
 
-void Node::addPrimitive(Primitive* prim){
-
-	this->primitives.push_back(prim);
-}

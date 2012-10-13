@@ -291,8 +291,6 @@ XMLScene::XMLScene(char *filename)
 		initParser(graphElement);
 	}
 
-
-
 	applyRefs(graphElement);
 
 	this->sGraph.printNodesID();
@@ -317,8 +315,9 @@ void XMLScene::display()
 
 	gv.apply();
 
+	glPushMatrix();
 	this->drawScene(this->sGraph.getNodeById("root"));
-
+	glPopMatrix();
 	//glutSolidTeapot(5);
 
 	glutSwapBuffers();
@@ -327,13 +326,9 @@ void XMLScene::display()
 
 void XMLScene::drawScene(Node* root){
 
-	//Node* re = this->sGraph.getNodeById("Rectangle");
-
-	//cout << "current ID = " << root->getID() << endl;
-	//cin.get();
+	//*glPushMatrix();
 	root->draw();
-
-
+	
 	if(root->hasChildren()){
 
 		vector<Node*>* children = root->getChildren();
@@ -341,21 +336,23 @@ void XMLScene::drawScene(Node* root){
 
 		for(it = children->begin(); it != children->end(); it++){
 
-			if((*it)->getAppearance() == NULL){			
-
+			//if((*it)->getAppearance() == NULL){			
+			glPushMatrix();
 				drawScene(*it);
-			}else{
+			glPopMatrix();
+			/*}else{
 				this->nodeInOrderOfProcessing.push(*it);
-			}
+			}*/
 		}
 	}
-
+	/*
 	if(root->getID() == "root"){
 		while(!this->nodeInOrderOfProcessing.empty()){
 			drawScene(this->nodeInOrderOfProcessing.front());
 			nodeInOrderOfProcessing.pop();
 		}
-	}
+	}*/
+	//glPopMatrix();
 }
 
 
