@@ -13,9 +13,16 @@ private:
 public:
 	Rectangle();
 	Rectangle(Vertex2D upLeftVertex, Vertex2D downRightVertex);
-
 	virtual ~Rectangle();
+	
+	void setUpLeftX(float x);
+	void setUpLeftY(float y);
 
+	void setDownRightX(float x);
+	void setDownRightY(float y);
+
+	virtual int addValues(string attr, string val);
+	
 	void draw();
 };
 
