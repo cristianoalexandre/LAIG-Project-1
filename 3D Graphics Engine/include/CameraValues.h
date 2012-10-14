@@ -7,7 +7,7 @@
 #include <cstring>
 #include <map>
 
-#include "CGFcamera.h"
+#include "Camera.h"
 #include "SceneValues.h"
 
 using namespace std;
@@ -17,22 +17,18 @@ using namespace std;
 const unsigned int ORTHO = 0;
 const unsigned int PERSPECTIVE = 1;
 
-typedef map <string, CGFcamera*> lsf_cams;
-
 class CameraValues : public SceneValues
 {
 private:
     static string initial_cam_id;
 
-    bool is_initial;
-    lsf_cams cams;
+    map <string, PerspectiveCamera*> persp_cams;
+    map <string, OrthoCamera*> ortho_cams;
 
 public:
     CameraValues();
     virtual ~CameraValues();
-
-    bool isInitial();
-
+    
     void addPerspectiveValues(char* attribute, char* value);
     void addFromValues(char* attribute, char* value);
     void addToValues(char* attribute, char* value);

@@ -2,11 +2,11 @@
 
 #include "GL/glew.h"
 
-Appearance::Appearance(string id){
+Appearance::Appearance(string id)
+{
 
-	this->id = id;
+    this->id = id;
 }
-
 
 void Appearance::addAmbientValue(char* attribute, float value)
 {
@@ -72,31 +72,37 @@ void Appearance::addSpecularValue(char* attribute, float value)
     }
 }
 
-
-
 void Appearance::addTexture(char* attr, char* value)
 {
-    if(string(attr) == "file"){
-		
-		//CGFtexture* text = new CGFtexture(string(value));
+    if (string(attr) == "file")
+    {
+
+        //CGFtexture* text = new CGFtexture(string(value));
 
 
-		this->texture_file = string(value);
-		//cout << texture_file << endl;
+        this->texture_file = string(value);
+        //cout << texture_file << endl;
 
-	}else{
-		if(string(attr) == "length_s"){
-			this->sWrp = atoi(value);
-		}else{
-			if(string(attr) == "length_t"){
-				this->tWrp = atoi(value);
-			}else{
-				printf("ERROR: in appearance texture values - unknown attribute: %s\n",attr);
-			}
-		}
-	}
+    }
+    else
+    {
+        if (string(attr) == "length_s")
+        {
+            this->sWrp = atoi(value);
+        }
+        else
+        {
+            if (string(attr) == "length_t")
+            {
+                this->tWrp = atoi(value);
+            }
+            else
+            {
+                printf("ERROR: in appearance texture values - unknown attribute: %s\n", attr);
+            }
+        }
+    }
 }
-
 
 void Appearance::applyValues()
 {
@@ -106,11 +112,11 @@ void Appearance::applyValues()
     setSpecular(specular);
 
 
-	setTextureWrap(sWrp,tWrp);
-	
+    setTextureWrap(sWrp, tWrp);
+
     setTexture(texture_file);
-	
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissive);
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissive);
     apply();
 }
 

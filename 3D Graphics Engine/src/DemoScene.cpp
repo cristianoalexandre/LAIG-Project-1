@@ -20,7 +20,6 @@ void DemoScene::init()
     // Declares and enables a light
     float light0_pos[4] = {4.0, 6.0, 5.0, 1.0};
     light0 = new CGFlight(GL_LIGHT0, light0_pos);
-    light0->enable();
 
     // Defines a default normal
     glNormal3f(0, 0, 1);

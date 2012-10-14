@@ -137,18 +137,22 @@ void XMLScene::applyRefs(TiXmlElement* elem)
                 idParent = (char*) tmpElem->Attribute("id");
                 idChild = (char*) elem->FirstAttribute()->Value();
 
-				if(!strcmp(name,"noderef")){
-					this->sGraph.getNodeById(string(idParent))->addChild(this->sGraph.getNodeById(string(idChild)));
-				}else{
-					if(!strcmp(name,"appearanceref")){
-						Appearance* app = this->av.getAppearance(string(idChild));
-						this->sGraph.getNodeById(string(idParent))->setAppearance(app);
-					}
-				}
+                if (!strcmp(name, "noderef"))
+                {
+                    this->sGraph.getNodeById(string(idParent))->addChild(this->sGraph.getNodeById(string(idChild)));
+                }
+                else
+                {
+                    if (!strcmp(name, "appearanceref"))
+                    {
+                        Appearance* app = this->av.getAppearance(string(idChild));
+                        this->sGraph.getNodeById(string(idParent))->setAppearance(app);
+                    }
+                }
                 break;
             }
             else
-			{
+            {
                 e1 = e2;
             }
         }
@@ -282,26 +286,32 @@ XMLScene::XMLScene(char *filename)
         initParser(lightningElement);
     }
 
-    /*
-    if (camerasElement == NULL) {
-    printf("cameras block not found\n");
-    } else {
-    initParser(camerasElement);
-    }*/
 
-
-    if(appearancesElement == NULL){
-		printf("appearances block not found\n");
-    }else{
-		initParser(appearancesElement);
+    if (camerasElement == NULL)
+    {
+        printf("cameras block not found\n");
     }
-     
-	
-	if (graphElement == NULL)
+    else
+    {
+        initParser(camerasElement);
+    }
+
+
+    if (appearancesElement == NULL)
+    {
+        printf("appearances block not found\n");
+    }
+    else
+    {
+        initParser(appearancesElement);
+    }
+
+
+    if (graphElement == NULL)
         printf("Graph block not found!\n");
     else
     {
-       initParser(graphElement);
+        initParser(graphElement);
     }
 
     printf("\n\nAPPLYING REFERENCES\n\n");
@@ -309,93 +319,88 @@ XMLScene::XMLScene(char *filename)
 
     this->sGraph.printNodesID();
 
-	printf("///////////////////////////////////\n");
-	cin.get();
+    printf("///////////////////////////////////\n");
+    cin.get();
 
 }
 
 void XMLScene::display()
 {
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Inicializacoes da matriz de transformacoes geometricas
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-
-    CGFscene::activeCamera->applyView();
-
-    axis.draw();
+    cv.apply();
+    //axis.draw();
 
     gv.apply();
     lv.apply();
-	av.apply();
+    av.apply();
 
-	
-    
-	this->drawSceneEXP(this->sGraph.getNodeById("root"));
+
+    this->drawSceneEXP(this->sGraph.getNodeById("root"));
     glutSwapBuffers();
 }
-
 
 XMLScene::~XMLScene()
 {
     delete(doc);
 }
 
+void XMLScene::drawSceneEXP(Node* node, int level)
+{
 
-void XMLScene::drawSceneEXP(Node* node, int level){
-
-	if (node->hasChildren())
+    if (node->hasChildren())
     {
-		this->proc.push(node);
+        this->proc.push(node);
         vector<Node*>* children = node->getChildren();
         vector<Node*>::iterator it;
 
         for (it = children->begin(); it != children->end(); it++)
-        {		
+        {
 
-			if((*it)->hasPrimitives()){
-				glPushMatrix();
-				this->drawFromStack(*it);
-				glPopMatrix();
-			/*}else{
-				drawSceneEXP(*it, level+1);
-			}*/
-			}
-			drawSceneEXP(*it, level+1);		
+            if ((*it)->hasPrimitives())
+            {
+                glPushMatrix();
+                this->drawFromStack(*it);
+                glPopMatrix();
+                /*}else{
+                        drawSceneEXP(*it, level+1);
+                }*/
+            }
+            drawSceneEXP(*it, level + 1);
         }
-		this->proc.pop();
+        this->proc.pop();
     }
-	return;
-	
+    return;
+
 }
 
-void XMLScene::drawFromStack(Node* it){
+void XMLScene::drawFromStack(Node* it)
+{
 
-	stack<Node*> applyOrder;
+    stack<Node*> applyOrder;
 
-	while(!proc.empty()){
-		applyOrder.push(proc.top());
-		proc.pop();
-	}
+    while (!proc.empty())
+    {
+        applyOrder.push(proc.top());
+        proc.pop();
+    }
 
 
-	size_t i = 0;
-	size_t size = applyOrder.size();
-	while(i++ < size){
+    size_t i = 0;
+    size_t size = applyOrder.size();
+    while (i++ < size)
+    {
 
-		glPushMatrix();
-		applyOrder.top()->draw();	
-		proc.push(applyOrder.top());		
-		applyOrder.pop();
-	}
+        glPushMatrix();
+        applyOrder.top()->draw();
+        proc.push(applyOrder.top());
+        applyOrder.pop();
+    }
 
-	it->draw();
-	i = 0;
-	while(i++ < size){
-		glPopMatrix();
-	}
+    it->draw();
+    i = 0;
+    while (i++ < size)
+    {
+        glPopMatrix();
+    }
 }

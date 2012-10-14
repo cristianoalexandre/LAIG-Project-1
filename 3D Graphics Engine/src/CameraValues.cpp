@@ -2,19 +2,12 @@
 
 #include "CameraValues.h"
 #include "CGFcamera.h"
+#include "Camera.h"
 
 string CameraValues::initial_cam_id = "";
 
 CameraValues::CameraValues()
 {
-    /* <cameras initial="cam1" >
-                <perspective id="cam1" near="0.1" far="0.2" angle="180">
-                        <from x="30" y="30" z="30" />
-                        <to x="0" y="0" z="0" />
-                </perspective>
-                <ortho id="cam2" near="0.1" far="0.2" left="20" right="20" top="20" bottom="20" />
-        </cameras> */
-    is_initial = false;
 
 }
 
@@ -27,21 +20,26 @@ void CameraValues::addPerspectiveValues(char* attribute, char* value)
 {
     if (!strcmp("id", attribute))
     {
-        CGFcamera * cam = new CGFcamera();
-        cams.insert(pair <string, CGFcamera*>((string) attribute, cam));
+        PerspectiveCamera * cam = new PerspectiveCamera();
+        persp_cams.insert(pair <string, PerspectiveCamera*>((string) value, cam));
+        persp_cams.rbegin()->second->id = (string) value;
     }
     else
     {
         double valued = atof(value);
 
-        /*
-        if (!strcmp("near", attribute))
-            
-        else if (!strcmp("far", attribute))
-            
-        else if (!strcmp("angle", attribute))
-         */
 
+        if (!strcmp("near", attribute))
+            persp_cams.rbegin()->second->perspective[NEAR] = valued;
+        else if (!strcmp("far", attribute))
+            persp_cams.rbegin()->second->perspective[FAR] = valued;
+        else if (!strcmp("angle", attribute))
+            persp_cams.rbegin()->second->perspective[ANGLE] = valued;
+        else
+        {
+            cerr << "unknown attribute - " << attribute;
+            exit(1);
+        }
     }
 }
 
@@ -49,25 +47,34 @@ void CameraValues::addFromValues(char* attribute, char* value)
 {
     double valued = atof(value);
 
-    /*
     if (!strcmp("x", attribute))
-        
+        persp_cams.rbegin()->second->from[X] = valued;
     else if (!strcmp("y", attribute))
-       
+        persp_cams.rbegin()->second->from[Y] = valued;
     else if (!strcmp("z", attribute))
-     */
+        persp_cams.rbegin()->second->from[Z] = valued;
+    else
+    {
+        cerr << "unknown attribute - " << attribute;
+        exit(1);
+    }
 }
 
 void CameraValues::addToValues(char* attribute, char* value)
 {
     double valued = atof(value);
 
-    /*    if (!strcmp("x", attribute))
-        
-        else if (!strcmp("y", attribute))
-       
-        else if (!strcmp("z", attribute))
-     */
+    if (!strcmp("x", attribute))
+        persp_cams.rbegin()->second->to[X] = valued;
+    else if (!strcmp("y", attribute))
+        persp_cams.rbegin()->second->to[Y] = valued;
+    else if (!strcmp("z", attribute))
+        persp_cams.rbegin()->second->to[Z] = valued;
+    else
+    {
+        cerr << "unknown attribute - " << attribute;
+        exit(1);
+    }
 }
 
 void CameraValues::addOrthoValues(char* attribute, char* value)
@@ -76,29 +83,29 @@ void CameraValues::addOrthoValues(char* attribute, char* value)
 
     if (!strcmp("id", attribute))
     {
-        CGFcamera * cam = new CGFcamera();
-        cams.insert(pair <string, CGFcamera*>((string) attribute, cam));
+        OrthoCamera * cam = new OrthoCamera();
+        ortho_cams.insert(pair <string, OrthoCamera*>((string) value, cam));
     }
     else
     {
-        /*if (!strcmp("near", attribute))
-
+        if (!strcmp("near", attribute))
+            ortho_cams.rbegin()->second->ortho[NEAR] = valued;
         else if (!strcmp("far", attribute))
-            
+            ortho_cams.rbegin()->second->ortho[FAR] = valued;
         else if (!strcmp("left", attribute))
-            
+            ortho_cams.rbegin()->second->ortho[LEFT] = valued;
         else if (!strcmp("right", attribute))
-            
+            ortho_cams.rbegin()->second->ortho[RIGHT] = valued;
         else if (!strcmp("top", attribute))
-            
+            ortho_cams.rbegin()->second->ortho[TOP] = valued;
         else if (!strcmp("bottom", attribute))
-         */
+            ortho_cams.rbegin()->second->ortho[BOTTOM] = valued;
+        else
+        {
+            cerr << "unknown attribute - " << attribute;
+            exit(1);
+        }
     }
-}
-
-bool CameraValues::isInitial()
-{
-    return is_initial;
 }
 
 void CameraValues::setInitialCameraID(char* newID)
@@ -108,20 +115,28 @@ void CameraValues::setInitialCameraID(char* newID)
 
 void CameraValues::apply()
 {
+    cout << "Camara inicial: " << initial_cam_id << endl;
 
+    persp_cams.find(initial_cam_id)->second->apply();
 }
 
 void CameraValues::addValues(char* element, char* attribute, char* value)
 {
-    /*
     if (!strcmp("cameras", element))
-        
-    if (!strcmp("perspective", element))
-        
+    {
+        initial_cam_id = (string) value;
+    }
+    else if (!strcmp("perspective", element))
+        addPerspectiveValues(attribute, value);
     else if (!strcmp("from", element))
-        
+        addFromValues(attribute, value);
     else if (!strcmp("to", element))
-        
+        addToValues(attribute, value);
     else if (!strcmp("ortho", element))
-     */
+        addOrthoValues(attribute, value);
+    else
+    {
+        cerr << "unknown element - " << element;
+        exit(1);
+    }
 }
