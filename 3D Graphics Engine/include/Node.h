@@ -15,6 +15,7 @@
 #include "CGFappearance.h"
 #include "CGFobject.h"
 #include "TransformValues.h"
+#include "Appearance.h"
 
 
 using namespace std;
@@ -27,7 +28,7 @@ private:
     vector <Primitive*> primitives;
 	map<string, Primitive*> primitiveTypes;
     int transf_matrix[4][4];
-    CGFappearance* appearance;
+	Appearance* appearance;
     TransformValues transforms;
 public:
     Node();
@@ -37,11 +38,11 @@ public:
     void setID(string ID);
     void addChild(Node* child);
     int getNumberOfChildren();
-    void setAppearance(CGFappearance* appearance);
+	void setAppearance(Appearance* appearance);
     bool seekNonExistentChildren();
     Node* getChildByID(char* id);
     Node* getChildByID(string id);
-	CGFappearance* getAppearance();
+	Appearance* getAppearance();
 	vector<Node*>* getChildren();
 
 	bool hasPrimitives();

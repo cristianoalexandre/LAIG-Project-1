@@ -41,6 +41,13 @@ void SceneGraph::printNodesID(){
 	while(iti != itf){
 
 		cout << "ID = " << (*iti).second->getID() << endl;
+		Appearance* tmp = (*iti).second->getAppearance();
+		if(tmp == NULL){
+
+			printf("Appearance = NULL\n");
+		}else{
+			cout << "Appearance = " << tmp->id << endl;
+		}
 		iti++;
 	}
 }

@@ -85,7 +85,7 @@ bool Node::seekNonExistentChildren()
 	return false;
 }
 
-void Node::setAppearance(CGFappearance* appearance)
+void Node::setAppearance(Appearance* appearance)
 {
 	this->appearance = appearance;
 }
@@ -152,7 +152,7 @@ bool Node::hasPrimitives(){
 	}
 }
 
-CGFappearance* Node::getAppearance(){
+Appearance* Node::getAppearance(){
 
 	return this->appearance;
 
@@ -162,9 +162,14 @@ void Node::draw(){
 
 
 
-	//cout << "Node ID = " << this->getID() << endl;
+	cout << "Node ID = " << this->getID() << endl;
 	this->transforms.apply();
 
+	//cin.get();
+	if(this->appearance != NULL){
+		this->appearance->applyValues();
+	}
+	//cin.get();
 	vector<Primitive*>::iterator iti = this->primitives.begin();
 	vector<Primitive*>::iterator itf = this->primitives.end();
 

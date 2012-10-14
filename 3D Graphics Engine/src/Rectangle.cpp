@@ -6,37 +6,52 @@ Rectangle::Rectangle(){
 Rectangle::~Rectangle(){
 }
 
-Rectangle::Rectangle(Vertex2D upLeftVertex, Vertex2D downRightVertex){
+Rectangle::Rectangle(Vertex2D downLeftVertex, Vertex2D upRightVertex){
 
-	this->upperLeftVertex = upLeftVertex;
-	this->bottomRightVertex = downRightVertex; 
+	this->bottomLeftVertex = downLeftVertex;
+	this->upperRightVertex = upRightVertex; 
 }
 
 
-void Rectangle::setUpLeftX(float x){this->upperLeftVertex.x = x;}
-void Rectangle::setUpLeftY(float y){this->upperLeftVertex.y = y;}
+void Rectangle::setDownLeftX(float x){this->bottomLeftVertex.x = x;}
+void Rectangle::setDownLeftY(float y){this->bottomLeftVertex.y = y;}
 
-void Rectangle::setDownRightX(float x){this->bottomRightVertex.x = x;}
-void Rectangle::setDownRightY(float y){this->bottomRightVertex.y = y;}
+void Rectangle::setUpRightX(float x){this->upperRightVertex.x = x;}
+void Rectangle::setUpRightY(float y){this->upperRightVertex.y = y;}
 
 
 void Rectangle::draw(){
-	glRectf(this->upperLeftVertex.x, this->upperLeftVertex.y, this->bottomRightVertex.x, this->bottomRightVertex.y);
+	
+	//glRectf(this->upperLeftVertex.x, this->upperLeftVertex.y, this->bottomRightVertex.x, this->bottomRightVertex.y);
+
+	//glNormal3f(0, 0, 1);
+	//glTranslatef(-0.5, -0.5, 0.5);
+	//glRectf(0, 0, 1, 1);
+	glBegin(GL_QUADS);
+		glTexCoord2i(0, 0);
+		glVertex3f(this->bottomLeftVertex.x, this->bottomLeftVertex.y, 0);
+		glTexCoord2i(1, 0);
+		glVertex3f(this->upperRightVertex.x, this->bottomLeftVertex.y, 0);
+		glTexCoord2i(1, 1);
+		glVertex3f(this->upperRightVertex.x, this->upperRightVertex.y, 0);
+		glTexCoord2i(0, 1);
+		glVertex3f(this->bottomLeftVertex.x, this->upperRightVertex.y, 0);
+	glEnd();
 }
 
 int Rectangle::addValues(string attr, string val){
 
 	if(attr == "x1"){
-		setUpLeftX(atof(val.c_str()));
+		setDownLeftX(atof(val.c_str()));
 	}else{
 		if(attr == "y1"){
-			setUpLeftY(atof(val.c_str()));
+			setDownLeftY(atof(val.c_str()));
 		}else{
 			if(attr == "x2"){
-				setDownRightX(atof(val.c_str()));
+				setUpRightX(atof(val.c_str()));
 			}else{
 				if(attr == "y2"){
-					setDownRightY(atof(val.c_str()));
+					setUpRightY(atof(val.c_str()));
 					return 1;
 				}
 			}

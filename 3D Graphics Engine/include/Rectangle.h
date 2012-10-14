@@ -9,19 +9,19 @@
 class Rectangle: public Primitive
 {
 private:
-	Vertex2D upperLeftVertex;
-	Vertex2D bottomRightVertex;
+	Vertex2D bottomLeftVertex;
+	Vertex2D upperRightVertex;
 
 public:
 	Rectangle();
-	Rectangle(Vertex2D upLeftVertex, Vertex2D downRightVertex);
+	Rectangle(Vertex2D downLeftVertex, Vertex2D upRightVertex);
 	virtual ~Rectangle();
 	
-	void setUpLeftX(float x);
-	void setUpLeftY(float y);
+	void setDownLeftX(float x);
+	void setDownLeftY(float y);
 
-	void setDownRightX(float x);
-	void setDownRightY(float y);
+	void setUpRightX(float x);
+	void setUpRightY(float y);
 
 	virtual int addValues(string attr, string val);
 	

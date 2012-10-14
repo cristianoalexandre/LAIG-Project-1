@@ -22,6 +22,7 @@ public:
     float emissive[4];
     string texture_file;
 
+	Appearance(string id);
     void addEmissiveValue(char *attribute, float value);
     void addAmbientValue(char *attribute, float value);
     void addDiffuseValue(char* attribute, float value);

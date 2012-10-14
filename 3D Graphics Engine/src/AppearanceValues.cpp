@@ -19,7 +19,7 @@ void AppearanceValues::addValues(char* element, char* attribute, char* value)
 
     if (!strcmp("appearance", element))
     {
-        appearances.insert(pair <string,Appearance*> ((string) value, new Appearance()));
+        appearances.insert(pair <string,Appearance*> ((string) value, new Appearance(string(value))));
     }
     else if (!strcmp("emissive", element))
     {
@@ -50,6 +50,16 @@ void AppearanceValues::addValues(char* element, char* attribute, char* value)
         cerr << "ERROR: appearance values - unknown element: " << element;
     }
     
+}
+
+
+Appearance* AppearanceValues::getAppearance(string id){
+	
+	if(id == "inherit"){
+		return NULL;
+	}else{
+		return this->appearances.at(id);
+	}
 }
 
 void AppearanceValues::apply()

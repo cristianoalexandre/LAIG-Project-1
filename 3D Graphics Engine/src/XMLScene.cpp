@@ -114,7 +114,7 @@ void XMLScene::applyRefs(TiXmlElement* elem)
 
     char* name = (char*) elem->Value();
 
-    if (string(name) == "noderef")
+    if (string(name) == "noderef" || string(name) == "appearanceref")
     {
 
         char* parentName = NULL;
@@ -137,17 +137,22 @@ void XMLScene::applyRefs(TiXmlElement* elem)
                 idParent = (char*) tmpElem->Attribute("id");
                 idChild = (char*) elem->FirstAttribute()->Value();
 
-                this->sGraph.getNodeById(string(idParent))->addChild(this->sGraph.getNodeById(string(idChild)));
-
+				if(!strcmp(name,"noderef")){
+					this->sGraph.getNodeById(string(idParent))->addChild(this->sGraph.getNodeById(string(idChild)));
+				}else{
+					if(!strcmp(name,"appearanceref")){
+						Appearance* app = this->av.getAppearance(string(idChild));
+						this->sGraph.getNodeById(string(idParent))->setAppearance(app);
+					}
+				}
                 break;
             }
             else
-            {
+			{
                 e1 = e2;
             }
         }
     }
-
 
     TiXmlElement* child = elem->FirstChildElement();
     if (child == NULL)
@@ -282,21 +287,21 @@ XMLScene::XMLScene(char *filename)
     printf("cameras block not found\n");
     } else {
     initParser(camerasElement);
-    }
-
+    }*/
 
 
     if(appearancesElement == NULL){
-    printf("appearances block not found\n");
+		printf("appearances block not found\n");
     }else{
-    initParser(appearancesElement);
+		initParser(appearancesElement);
     }
-     */
-    if (graphElement == NULL)
+     
+	
+	if (graphElement == NULL)
         printf("Graph block not found!\n");
     else
     {
-        initParser(graphElement);
+       initParser(graphElement);
     }
 
     printf("\n\nAPPLYING REFERENCES\n\n");
@@ -305,13 +310,7 @@ XMLScene::XMLScene(char *filename)
     this->sGraph.printNodesID();
 
 	printf("///////////////////////////////////\n");
-	/*Node* r = this->sGraph.getNodeById("root");
-
-	for(size_t i = 0; i < r->getChildren()->size(); i++){
-
-		cout << r->getChildren()->at(i)->getID() << endl;
-	}*/
-    cin.get();
+	cin.get();
 
 }
 
@@ -330,24 +329,14 @@ void XMLScene::display()
 
     axis.draw();
 
-    gv.apply();
+    //gv.apply();
     //lv.apply();
+	av.apply();
 
 	
     //this->drawScene(this->sGraph.getNodeById("root"));
 	this->drawSceneEXP(this->sGraph.getNodeById("root"));
 
-
-/*
-	if(proc.empty()){
-		cout << "QUEUE is empty\n";
-	}else{
-		cout << "QUEUE is NOT empty\n";
-		while(!proc.empty()){
-			proc.pop();
-		}
-		cout << "QUEUE cleaned\n";
-	}*/
 	//cin.get();
     glutSwapBuffers();
 }
@@ -406,7 +395,6 @@ void XMLScene::drawSceneEXP(Node* node, int level){
 				glPushMatrix();
 				this->drawFromStack(*it);
 				glPopMatrix();
-				
 			}else{
 				drawSceneEXP(*it, level+1);
 			}

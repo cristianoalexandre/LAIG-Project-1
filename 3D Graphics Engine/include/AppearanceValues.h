@@ -23,8 +23,10 @@ public:
     AppearanceValues();
     virtual ~AppearanceValues();
     
+	Appearance* getAppearance(string id);
     void apply();
     void addValues(char* element, char* attribute, char* value);
+	
 };
 
 #endif	/* APPEARANCEVALUES_H */

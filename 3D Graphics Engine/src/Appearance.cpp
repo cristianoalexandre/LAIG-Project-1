@@ -2,6 +2,12 @@
 
 #include "GL/glew.h"
 
+Appearance::Appearance(string id){
+
+	this->id = id;
+}
+
+
 void Appearance::addAmbientValue(char* attribute, float value)
 {
     if (!strcmp("r", attribute))
@@ -72,7 +78,7 @@ void Appearance::applyValues()
     setDiffuse(diffuse);
     setShininess(shininess);
     setSpecular(specular);
-    setTexture(texture_file);
+    //setTexture(texture_file);
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissive);
     apply();
 }
