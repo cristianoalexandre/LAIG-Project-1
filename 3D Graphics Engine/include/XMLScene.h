@@ -32,8 +32,8 @@ public:
     void applyRefs(TiXmlElement* elem);
     void display();
 	void drawScene(Node* root);
-	void drawSceneEXP(Node* root);
-	void drawFromStack();
+	void drawSceneEXP(Node* root, int level = 0);
+	void drawFromStack(Node* it);
 protected:
 
     bool preParserCompleted;

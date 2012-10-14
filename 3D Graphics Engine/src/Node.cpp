@@ -160,7 +160,7 @@ CGFappearance* Node::getAppearance(){
 
 void Node::draw(){
 
-	//glPushMatrix();
+
 
 	//cout << "Node ID = " << this->getID() << endl;
 	this->transforms.apply();
@@ -172,7 +172,7 @@ void Node::draw(){
 		(*iti)->draw();
 		iti++;
 	}
-	//glPopMatrix();
+
 
 }
 

@@ -21,9 +21,7 @@ void Rectangle::setDownRightY(float y){this->bottomRightVertex.y = y;}
 
 
 void Rectangle::draw(){
-	printf("drawing\n");
 	glRectf(this->upperLeftVertex.x, this->upperLeftVertex.y, this->bottomRightVertex.x, this->bottomRightVertex.y);
-	cin.get();
 }
 
 int Rectangle::addValues(string attr, string val){

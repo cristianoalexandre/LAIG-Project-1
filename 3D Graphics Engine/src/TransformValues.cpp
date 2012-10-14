@@ -144,17 +144,14 @@ void TransformValues::addTranslationValues(char* attr, char* val)
 
 void TransformValues::apply()
 {
-	
-	
-	//cout << this->order[0].first << endl;
-	for(size_t i = 0; i < this->order.size(); i++){
 
+	for(int i = 0; i < this->order.size(); i++){
 		string type = this->order[i].first;
 
-		if(type == "scale"){
+		if(type == "scale"){		
 			glScalef(this->scale[0], this->scale[1], this->scale[2]);
 		}
-		if(type == "translation"){
+		if(type == "translation"){		
 			glTranslatef(this->translate[0], this->translate[1], this->translate[2]);
 		}
 		if(type == "rotation"){

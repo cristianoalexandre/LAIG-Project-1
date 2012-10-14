@@ -333,22 +333,31 @@ void XMLScene::display()
     gv.apply();
     //lv.apply();
 
-    glPushMatrix();
 	
-   //this->drawScene(this->sGraph.getNodeById("root"));
+    //this->drawScene(this->sGraph.getNodeById("root"));
 	this->drawSceneEXP(this->sGraph.getNodeById("root"));
-	this->drawFromStack();
-    glPopMatrix();
 
+
+/*
+	if(proc.empty()){
+		cout << "QUEUE is empty\n";
+	}else{
+		cout << "QUEUE is NOT empty\n";
+		while(!proc.empty()){
+			proc.pop();
+		}
+		cout << "QUEUE cleaned\n";
+	}*/
+	//cin.get();
     glutSwapBuffers();
 }
 
-void XMLScene::drawScene(Node* root)
+/*(void XMLScene::drawScene(Node* root)
 {
 
     glPushMatrix();
     root->draw();
-    //cin.get();
+    cin.get();
     if (root->hasChildren())
     {
 
@@ -358,23 +367,23 @@ void XMLScene::drawScene(Node* root)
         for (it = children->begin(); it != children->end(); it++)
         {
 
-            //if((*it)->getAppearance() == NULL){			
+           if((*it)->getAppearance() == NULL){			
             drawScene(*it);
 
-            /*}else{
+            }else{
             this->nodeInOrderOfProcessing.push(*it);
-            }*/
+            }
         }
     }
-    /*
+    
     if(root->getID() == "root"){
     while(!this->nodeInOrderOfProcessing.empty()){
     drawScene(this->nodeInOrderOfProcessing.front());
     nodeInOrderOfProcessing.pop();
     }
-    }*/
+    }
     glPopMatrix();
-}
+}*/
 
 XMLScene::~XMLScene()
 {
@@ -382,12 +391,12 @@ XMLScene::~XMLScene()
 }
 
 
-void XMLScene::drawSceneEXP(Node* root){
+void XMLScene::drawSceneEXP(Node* node, int level){
 
-	this->proc.push(root);
-	if (root->hasChildren())
+	if (node->hasChildren())
     {
-        vector<Node*>* children = root->getChildren();
+		this->proc.push(node);
+        vector<Node*>* children = node->getChildren();
         vector<Node*>::iterator it;
 
         for (it = children->begin(); it != children->end(); it++)
@@ -395,45 +404,42 @@ void XMLScene::drawSceneEXP(Node* root){
 
 			if((*it)->hasPrimitives()){
 				glPushMatrix();
-				this->drawFromStack();
-				(*it)->draw();
-				for(size_t i = 0; i <= proc.size(); i++){
-					glPopMatrix();
-				}
+				this->drawFromStack(*it);
 				glPopMatrix();
 				
 			}else{
-				drawSceneEXP(*it);
+				drawSceneEXP(*it, level+1);
 			}
         }
+		this->proc.pop();
     }
 	return;
-
+	
 }
 
-void XMLScene::drawFromStack(){
+void XMLScene::drawFromStack(Node* it){
 
-	stack<Node*> aux;
-	
-	
+	stack<Node*> applyOrder;
+
+	while(!proc.empty()){
+		applyOrder.push(proc.top());
+		proc.pop();
+	}
+
+
 	size_t i = 0;
-	while(i < proc.size()){
+	size_t size = applyOrder.size();
+	while(i++ < size){
 
 		glPushMatrix();
-		proc.top()->draw();
-	
-		if(i != 0){
-			aux.push(proc.top());
-		}
-		proc.pop();
-		i++;
+		applyOrder.top()->draw();	
+		proc.push(applyOrder.top());		
+		applyOrder.pop();
 	}
-	while(!aux.empty()){
 
-		proc.push(aux.top());
-		aux.pop();
-		
+	it->draw();
+	i = 0;
+	while(i++ < size){
+		glPopMatrix();
 	}
-	
-	
 }
