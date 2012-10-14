@@ -21,8 +21,10 @@ public:
     string id;
     float emissive[4];
     string texture_file;
+	int sWrp, tWrp;
 
 	Appearance(string id);
+	void addTexture(char* attr, char* value);
     void addEmissiveValue(char *attribute, float value);
     void addAmbientValue(char *attribute, float value);
     void addDiffuseValue(char* attribute, float value);

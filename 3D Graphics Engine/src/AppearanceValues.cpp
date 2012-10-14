@@ -43,7 +43,7 @@ void AppearanceValues::addValues(char* element, char* attribute, char* value)
     }
     else if (!strcmp("texture", element))
     {
-        appearances.rbegin()->second->texture_file = (string) value;
+        appearances.rbegin()->second->addTexture(attribute, value);
     }
     else
     {

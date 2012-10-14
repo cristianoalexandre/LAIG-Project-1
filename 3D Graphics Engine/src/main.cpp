@@ -1,8 +1,3 @@
-/* 
- * G0_Base: projeto inicial de CGra
- * 
- */
-
 #include <iostream>
 #include <exception>
 
@@ -14,28 +9,31 @@
 using std::cout;
 using std::exception;
 
+int main(int argc, char* argv[])
+{
 
-int main(int argc, char* argv[]) {
+    CGFapplication app = CGFapplication();
+    XMLScene *xml = new XMLScene((char*) "scene.lsf");
 
-	CGFapplication app = CGFapplication();
-	XMLScene xml = XMLScene("scene.lsf");
+    try
+    {
+        app.init(&argc, argv);
 
-	try {
-		app.init(&argc, argv);
+        app.setScene(xml);
+        app.setInterface(new CGFinterface());
 
-		app.setScene(new DemoScene());
-		app.setInterface(new CGFinterface());
-		
-		app.run();
-	}
-	catch(GLexception& ex) {
-		cout << "Erro: " << ex.what();
-		return -1;
-	}
-	catch(exception& ex) {
-		cout << "Erro inesperado: " << ex.what();
-		return -1;
-	}
+        app.run();
+    }
+    catch (GLexception& ex)
+    {
+        cout << "Erro: " << ex.what();
+        return -1;
+    }
+    catch (exception& ex)
+    {
+        cout << "Erro inesperado: " << ex.what();
+        return -1;
+    }
 
-	return 0;
+    return 0;
 }

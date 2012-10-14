@@ -329,50 +329,16 @@ void XMLScene::display()
 
     axis.draw();
 
-    //gv.apply();
-    //lv.apply();
+    gv.apply();
+    lv.apply();
 	av.apply();
 
 	
-    //this->drawScene(this->sGraph.getNodeById("root"));
+    
 	this->drawSceneEXP(this->sGraph.getNodeById("root"));
-
-	//cin.get();
     glutSwapBuffers();
 }
 
-/*(void XMLScene::drawScene(Node* root)
-{
-
-    glPushMatrix();
-    root->draw();
-    cin.get();
-    if (root->hasChildren())
-    {
-
-        vector<Node*>* children = root->getChildren();
-        vector<Node*>::iterator it;
-
-        for (it = children->begin(); it != children->end(); it++)
-        {
-
-           if((*it)->getAppearance() == NULL){			
-            drawScene(*it);
-
-            }else{
-            this->nodeInOrderOfProcessing.push(*it);
-            }
-        }
-    }
-    
-    if(root->getID() == "root"){
-    while(!this->nodeInOrderOfProcessing.empty()){
-    drawScene(this->nodeInOrderOfProcessing.front());
-    nodeInOrderOfProcessing.pop();
-    }
-    }
-    glPopMatrix();
-}*/
 
 XMLScene::~XMLScene()
 {
@@ -395,9 +361,11 @@ void XMLScene::drawSceneEXP(Node* node, int level){
 				glPushMatrix();
 				this->drawFromStack(*it);
 				glPopMatrix();
-			}else{
+			/*}else{
 				drawSceneEXP(*it, level+1);
+			}*/
 			}
+			drawSceneEXP(*it, level+1);		
         }
 		this->proc.pop();
     }

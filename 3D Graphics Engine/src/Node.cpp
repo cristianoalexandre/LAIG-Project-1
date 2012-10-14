@@ -160,16 +160,13 @@ Appearance* Node::getAppearance(){
 
 void Node::draw(){
 
-
-
-	cout << "Node ID = " << this->getID() << endl;
 	this->transforms.apply();
 
-	//cin.get();
+
 	if(this->appearance != NULL){
 		this->appearance->applyValues();
 	}
-	//cin.get();
+	
 	vector<Primitive*>::iterator iti = this->primitives.begin();
 	vector<Primitive*>::iterator itf = this->primitives.end();
 
@@ -177,8 +174,6 @@ void Node::draw(){
 		(*iti)->draw();
 		iti++;
 	}
-
-
 }
 
 
