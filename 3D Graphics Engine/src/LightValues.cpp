@@ -4,8 +4,10 @@
 
 LightValues::LightValues()
 {
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 4; i++)
         ambient_light.push_back(0);
+    
+    ambient_light_added = 4;
 }
 
 LightValues::~LightValues()
@@ -16,7 +18,8 @@ LightValues::~LightValues()
 void LightValues::apply()
 {
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, &ambient_light[0]);
-
+    cout << ambient_light[0] << " " << ambient_light[1] << " " << ambient_light[2];
+    
     for (lsf_lights::iterator it = lights.begin(); it != lights.end(); it++)
     {
         it->second->draw();
@@ -25,17 +28,15 @@ void LightValues::apply()
 
 void LightValues::addValues(char* element, char* attribute, char* value)
 {
-    bool ambient_light = true;
-
     if (!strcmp("lighting", element))
     {
 
     }
     else if (!strcmp("ambient", element))
     {
-        if (ambient_light)
+        if (ambient_light_added > 0)
         {
-            ambient_light = false;
+            ambient_light_added--;
             setAmbientLight(attribute, value);
         }
         else

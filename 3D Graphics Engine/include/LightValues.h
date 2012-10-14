@@ -15,6 +15,7 @@ class LightValues : public SceneValues
 private:
     lsf_lights lights;
     vector <float> ambient_light;
+    int ambient_light_added;
     
 public:
     LightValues();
