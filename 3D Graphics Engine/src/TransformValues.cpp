@@ -90,9 +90,6 @@ void TransformValues::addRotationValues(char* attr, char* val)
 				this->rotate[1] = 0;
 				this->rotate[2] = 0;
 				this->rotate[3] = 1;
-
-				pair<string,float*> p("rotation",this->scale);
-				this->order.push_back(p);
 				break;
 			}
 		default:
@@ -105,6 +102,8 @@ void TransformValues::addRotationValues(char* attr, char* val)
 		if(key == "angle"){
 
 			this->rotate[0] = atof(val);
+			pair<string,float*> p("rotation",this->rotate);
+			this->order.push_back(p);
 		}else{
 			printf("ERROR! in Rotate Element -> Unrecognized attribute: '%s'\nPress any key to exit\n", attr);
 		}
@@ -131,8 +130,7 @@ void TransformValues::addTranslationValues(char* attr, char* val)
 	case 'z':
 		{
 			this->translate[2] = atof(val);
-
-			pair<string,float*> p("translation",this->scale);
+			pair<string,float*> p("translation",this->translate);
 			this->order.push_back(p);
 			break;
 		}
@@ -147,9 +145,10 @@ void TransformValues::addTranslationValues(char* attr, char* val)
 void TransformValues::apply()
 {
 	
+	
+	//cout << this->order[0].first << endl;
 	for(size_t i = 0; i < this->order.size(); i++){
 
-		
 		string type = this->order[i].first;
 
 		if(type == "scale"){

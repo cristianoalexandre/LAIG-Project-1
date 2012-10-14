@@ -32,12 +32,15 @@ public:
     void applyRefs(TiXmlElement* elem);
     void display();
 	void drawScene(Node* root);
+	void drawSceneEXP(Node* root);
+	void drawFromStack();
 protected:
 
     bool preParserCompleted;
 
     set <TiXmlElement*> elements;
 	queue<Node*> nodeInOrderOfProcessing;
+	stack<Node*> proc;
 	
     TiXmlDocument* doc;
 

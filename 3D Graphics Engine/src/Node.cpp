@@ -115,7 +115,7 @@ void Node::addValues(char* elem, char* attr, char* value){
 		if(elemName == "rectangle"){
 			map<string,Primitive*>::iterator it = primitiveTypes.find("rectangle");
 			if(it->second->addValues(attr, string(value))){
-				printf("ADICIONOU PRIMITIVA\n");
+				printf("ADICIONADA PRIMITIVA\n");
 				this->addPrimitive(it->second);
 			}
 		}
@@ -143,6 +143,15 @@ bool Node::hasChildren(){
 	return !(this->getChildren()->empty());
 }
 
+bool Node::hasPrimitives(){
+
+	if(this->primitives.size() == 0){
+		return false;
+	}else{
+		return true;
+	}
+}
+
 CGFappearance* Node::getAppearance(){
 
 	return this->appearance;
@@ -153,9 +162,8 @@ void Node::draw(){
 
 	//glPushMatrix();
 
-//	cout << "Node ID = " << this->getID() << endl;
+	//cout << "Node ID = " << this->getID() << endl;
 	this->transforms.apply();
-
 
 	vector<Primitive*>::iterator iti = this->primitives.begin();
 	vector<Primitive*>::iterator itf = this->primitives.end();

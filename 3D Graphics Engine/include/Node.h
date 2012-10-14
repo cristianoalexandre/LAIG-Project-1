@@ -43,6 +43,8 @@ public:
     Node* getChildByID(string id);
 	CGFappearance* getAppearance();
 	vector<Node*>* getChildren();
+
+	bool hasPrimitives();
 	bool hasChildren();
 	void draw();
 

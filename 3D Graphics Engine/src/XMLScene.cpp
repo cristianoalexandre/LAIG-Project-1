@@ -292,7 +292,7 @@ XMLScene::XMLScene(char *filename)
     initParser(appearancesElement);
     }
      */
-    /*if (graphElement == NULL)
+    if (graphElement == NULL)
         printf("Graph block not found!\n");
     else
     {
@@ -302,7 +302,15 @@ XMLScene::XMLScene(char *filename)
     printf("\n\nAPPLYING REFERENCES\n\n");
     applyRefs(graphElement);
 
-    this->sGraph.printNodesID();*/
+    this->sGraph.printNodesID();
+
+	printf("///////////////////////////////////\n");
+	/*Node* r = this->sGraph.getNodeById("root");
+
+	for(size_t i = 0; i < r->getChildren()->size(); i++){
+
+		cout << r->getChildren()->at(i)->getID() << endl;
+	}*/
     cin.get();
 
 }
@@ -323,10 +331,13 @@ void XMLScene::display()
     axis.draw();
 
     gv.apply();
-    lv.apply();
+    //lv.apply();
 
     glPushMatrix();
+	
    //this->drawScene(this->sGraph.getNodeById("root"));
+	this->drawSceneEXP(this->sGraph.getNodeById("root"));
+	this->drawFromStack();
     glPopMatrix();
 
     glutSwapBuffers();
@@ -368,4 +379,61 @@ void XMLScene::drawScene(Node* root)
 XMLScene::~XMLScene()
 {
     delete(doc);
+}
+
+
+void XMLScene::drawSceneEXP(Node* root){
+
+	this->proc.push(root);
+	if (root->hasChildren())
+    {
+        vector<Node*>* children = root->getChildren();
+        vector<Node*>::iterator it;
+
+        for (it = children->begin(); it != children->end(); it++)
+        {		
+
+			if((*it)->hasPrimitives()){
+				glPushMatrix();
+				this->drawFromStack();
+				(*it)->draw();
+				for(size_t i = 0; i <= proc.size(); i++){
+					glPopMatrix();
+				}
+				glPopMatrix();
+				
+			}else{
+				drawSceneEXP(*it);
+			}
+        }
+    }
+	return;
+
+}
+
+void XMLScene::drawFromStack(){
+
+	stack<Node*> aux;
+	
+	
+	size_t i = 0;
+	while(i < proc.size()){
+
+		glPushMatrix();
+		proc.top()->draw();
+	
+		if(i != 0){
+			aux.push(proc.top());
+		}
+		proc.pop();
+		i++;
+	}
+	while(!aux.empty()){
+
+		proc.push(aux.top());
+		aux.pop();
+		
+	}
+	
+	
 }

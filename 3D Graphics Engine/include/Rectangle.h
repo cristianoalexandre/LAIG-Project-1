@@ -3,6 +3,8 @@
 
 #include "Primitive.h"
 
+#include <iostream>
+
 
 class Rectangle: public Primitive
 {
