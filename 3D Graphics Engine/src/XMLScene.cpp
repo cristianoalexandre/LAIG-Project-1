@@ -54,11 +54,8 @@ void XMLScene::nodeAttributeParser(char* name, TiXmlElement* elem, Node* no)
         char* tmp = (char*) attr->Value();
         char* attrName = (char*) attr->Name();
 
-		if(rootNodeRead == false && name == "node"){
+		if(name == "graph"){
 			this->rootId = string(tmp);
-			printf("id = %s\n", tmp);
-			cin.get();
-			rootNodeRead = true;
 		}
 
         if (string(attrName) != "appearanceref" && string(attrName) != "noderef")
@@ -236,7 +233,6 @@ void XMLScene::initParser(TiXmlElement* elem)
 
 XMLScene::XMLScene(char *filename)
 {
-	rootNodeRead = false;
 
     doc = new TiXmlDocument(filename);
     bool loadOkay = doc->LoadFile();
@@ -259,7 +255,6 @@ XMLScene::XMLScene(char *filename)
     camerasElement = lsfElement->FirstChildElement("cameras");
     lightningElement = lsfElement->FirstChildElement("lighting");
     appearancesElement = lsfElement->FirstChildElement("appearances");
-    leavesElement = lsfElement->FirstChildElement("leaves");
     nodesElement = lsfElement->FirstChildElement("nodes");
     graphElement = lsfElement->FirstChildElement("graph");
 
@@ -269,7 +264,7 @@ XMLScene::XMLScene(char *filename)
     this->elements.insert(appearancesElement);
     this->elements.insert(graphElement);
     this->elements.insert(nodesElement);
-    this->elements.insert(leavesElement);
+
 
     this->init();
 
@@ -291,12 +286,12 @@ XMLScene::XMLScene(char *filename)
         initParser(lightningElement);
     }
 
-    /*
+    
     if (camerasElement == NULL) {
     printf("cameras block not found\n");
     } else {
     initParser(camerasElement);
-    }*/
+    }
 
 
     if(appearancesElement == NULL){
@@ -344,7 +339,7 @@ void XMLScene::display()
 
 	
     
-	this->drawSceneEXP(this->sGraph.getNodeById("FaceTest"));
+	this->drawSceneEXP(this->sGraph.getNodeById("root"));
     glutSwapBuffers();
 }
 
@@ -370,9 +365,6 @@ void XMLScene::drawSceneEXP(Node* node, int level){
 				glPushMatrix();
 				this->drawFromStack(*it);
 				glPopMatrix();
-			/*}else{
-				drawSceneEXP(*it, level+1);
-			}*/
 			}
 			drawSceneEXP(*it, level+1);		
         }

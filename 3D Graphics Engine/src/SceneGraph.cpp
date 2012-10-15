@@ -51,23 +51,3 @@ void SceneGraph::printNodesID(){
 		iti++;
 	}
 }
-
-void SceneGraph::drawCycle(Node* root){
-
-	root->draw();
-
-	if(root->hasChildren()){
-
-		vector<Node*>* children = root->getChildren();
-		vector<Node*>::iterator it;
-
-		for(it = children->begin(); it != children->end(); it++){
-
-			if((*it)->getAppearance() == NULL){			
-				drawCycle(*it);
-			}else{
-				this->nodeInOrderOfProcessing.push(*it);
-			}
-		}
-	}
-}

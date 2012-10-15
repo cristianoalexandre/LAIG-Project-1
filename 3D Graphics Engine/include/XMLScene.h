@@ -36,7 +36,7 @@ public:
 	void drawFromStack(Node* it);
 protected:
 
-    bool rootNodeRead;
+
 	string rootId;
 
     set <TiXmlElement*> elements;

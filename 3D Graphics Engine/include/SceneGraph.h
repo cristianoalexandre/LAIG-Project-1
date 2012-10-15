@@ -29,7 +29,6 @@ public:
     string getNodeID(Node* node);
     void addNode(Node* node);
 	void printNodesID();
-	void drawCycle(Node* root);
 };
 
 #endif	/* SCENEGRAPH_H */

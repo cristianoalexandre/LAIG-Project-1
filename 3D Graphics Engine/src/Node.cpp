@@ -112,10 +112,13 @@ void Node::addValues(char* elem, char* attr, char* value){
 			printf("ERROR - unrecognized node attribute\n");
 		}
 	}else{
-		if(elemName == "rectangle"){
-			map<string,Primitive*>::iterator it = primitiveTypes.find("rectangle");
+		if(elemName == "rectangle" || elemName == "cylinder"
+			|| elemName == "sphere" || elemName == "triangle" || elemName == "torus"){
+
+			map<string,Primitive*>::iterator it = primitiveTypes.find(elemName);
 			if(it->second->addValues(attr, string(value))){
-				printf("ADICIONADA PRIMITIVA\n");
+				printf("ADICIONADA PRIMITIVA - type = ");
+				cout << elemName << endl;
 				this->addPrimitive(it->second);
 			}
 		}
@@ -162,8 +165,9 @@ void Node::draw(){
 
 	this->transforms.apply();
 
-
+	
 	if(this->appearance != NULL){
+		//APPEARANCES MAY CRASH, IF SO, COMMENT NEXT LINE
 		this->appearance->applyValues();
 	}
 	
@@ -171,6 +175,7 @@ void Node::draw(){
 	vector<Primitive*>::iterator itf = this->primitives.end();
 
 	while(iti != itf){
+
 		(*iti)->draw();
 		iti++;
 	}

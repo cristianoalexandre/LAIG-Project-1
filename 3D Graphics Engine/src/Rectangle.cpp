@@ -22,11 +22,6 @@ void Rectangle::setUpRightY(float y){this->upperRightVertex.y = y;}
 
 void Rectangle::draw(){
 	
-	//glRectf(this->upperLeftVertex.x, this->upperLeftVertex.y, this->bottomRightVertex.x, this->bottomRightVertex.y);
-
-	//glNormal3f(0, 0, 1);
-	//glTranslatef(-0.5, -0.5, 0.5);
-	//glRectf(0, 0, 1, 1);
 	glBegin(GL_QUADS);
 		glTexCoord2i(0, 0);
 		glVertex3f(this->bottomLeftVertex.x, this->bottomLeftVertex.y, 0);

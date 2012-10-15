@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 {
 
     CGFapplication app = CGFapplication();
-    XMLScene *xml = new XMLScene((char*) "./xml/scene.xml");
+    XMLScene *xml = new XMLScene((char*) "scene.lsf");
 
     try
     {

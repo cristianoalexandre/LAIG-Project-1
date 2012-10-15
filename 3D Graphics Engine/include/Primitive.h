@@ -3,6 +3,7 @@
 
 #include "CGFobject.h"
 
+#include <iostream>
 #include <string>
 
 using namespace std;

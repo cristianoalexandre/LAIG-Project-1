@@ -16,7 +16,14 @@ public:
 	Torus(float iRadius, float oRadius, int slcs, int loops);
 	virtual ~Torus();
 
+	void setInnerRadius(float irad);
+	void setOuterRadius(float oRad);
+	void setSlices(int slcs);
+	void setLoops(int loop);
 	void draw();
+
+	virtual int addValues(string attr, string val);
+
 };
 
 #endif
