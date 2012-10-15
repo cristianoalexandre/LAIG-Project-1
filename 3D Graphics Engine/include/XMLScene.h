@@ -36,7 +36,8 @@ public:
 	void drawFromStack(Node* it);
 protected:
 
-    bool preParserCompleted;
+    bool rootNodeRead;
+	string rootId;
 
     set <TiXmlElement*> elements;
 	queue<Node*> nodeInOrderOfProcessing;
