@@ -314,6 +314,7 @@ XMLScene::XMLScene(char *filename)
     this->sGraph.printNodesID();
 
 	printf("///////////////////////////////////\n");
+
 	cin.get();
 
 }
@@ -330,11 +331,12 @@ void XMLScene::display()
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
     CGFscene::activeCamera->applyView();
-
+	
+	cv.apply();
     axis.draw();
 
     gv.apply();
-    //lv.apply();
+   // lv.apply();
 	av.apply();
 
 	

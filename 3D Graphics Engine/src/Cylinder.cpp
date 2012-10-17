@@ -36,19 +36,25 @@ void Cylinder::setStacks(int stcks){
 }
 
 void Cylinder::draw(){
-	gluCylinder(gluNewQuadric(), this->baseRadius, this->topRadius, this->height, this->slices, this->stacks);
+
+	GLUquadric* quadric = gluNewQuadric();
+
+	gluQuadricTexture(quadric, true);
+
+	
+	gluCylinder(quadric, this->baseRadius, this->topRadius, this->height, this->slices, this->stacks);
 
 	//Base circle
 	glPushMatrix();
 	glTranslatef(0.0,0.0,0.0);
 	glRotatef(180,0,1,0);
-	gluDisk(gluNewQuadric(),0.0,this->baseRadius,this->slices,1);
+	gluDisk(quadric,0.0,this->baseRadius,this->slices,1);
 	glPopMatrix();
 	
 	//Top Circle
 	glPushMatrix();
 	glTranslatef(0.0,0.0,this->height);
-	gluDisk(gluNewQuadric(),0.0,this->topRadius,this->slices,1);
+	gluDisk(quadric,0.0,this->topRadius,this->slices,1);
 	glPopMatrix();
 }
 

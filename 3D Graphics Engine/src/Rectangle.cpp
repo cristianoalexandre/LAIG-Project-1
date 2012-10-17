@@ -23,6 +23,8 @@ void Rectangle::setUpRightY(float y){this->upperRightVertex.y = y;}
 void Rectangle::draw(){
 	
 	glBegin(GL_QUADS);
+	glNormal3f(0.0,0.0,1.0);
+	glEnable(GL_NORMALIZE);
 		glTexCoord2i(0, 0);
 		glVertex3f(this->bottomLeftVertex.x, this->bottomLeftVertex.y, 0);
 		glTexCoord2i(1, 0);

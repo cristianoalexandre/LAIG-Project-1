@@ -43,6 +43,10 @@ int Sphere::addValues(string attr, string val){
 
 void Sphere::draw(){
 
-	gluSphere(gluNewQuadric(), this->radius, this->slices, this->stacks);
+	GLUquadric* quadric = gluNewQuadric();
+
+	gluQuadricTexture(quadric, true);
+
+	gluSphere(quadric, this->radius, this->slices, this->stacks);
 	//glutSolidSphere(this->radius, this->slices, this->stacks);
 }
